@@ -1,143 +1,294 @@
-<script>
-    // Ждем полной загрузки HTML
-    window.onload = function() {
-        // Базы мест Челябинска
-        const places18Plus = `
-            <optgroup label="🔥 Бары, Пабы и Легенды">
-                <option value="Бар «Доска»">Бар «Доска» (Главный движ)</option>
-                <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
-                <option value="Gipsy Club">Gipsy Club</option>
-                <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
-                <option value="The Бочка">The Бочка</option>
-                <option value="Malina Bar">Malina Bar</option>
-                <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
-                <option value="Garage Underground">Garage Underground</option>
-            </optgroup>
-            <optgroup label="💨 Кальянные и Лаунж">
-                <option value="Мята Lounge">Мята Lounge</option>
-                <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
-                <option value="Облако 53">Облако 53</option>
-                <option value="DarcDay">DarcDay</option>
-            </optgroup>
-            <optgroup label="🍽 Рестораны">
-                <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
-                <option value="Barbaresco">Barbaresco</option>
-                <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
-                <option value="Brüdershaft">Brüdershaft</option>
-            </optgroup>
-            <optgroup label="🌳 Прогулки и Ночной город">
-                <option value="Пешеходная Кировка">Пешеходная Кировка (Ночные бары)</option>
-                <option value="Набережная Миасс">Набережная реки Миасс</option>
-            </optgroup>
-        `;
-
-        const placesUnder18 = `
-            <optgroup label="☕ Уютные кофейни и Кафе">
-                <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
-                <option value="Coffee Luks">Coffee Luks</option>
-                <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
-                <option value="Суши-бар / Азия">Суши-бар / Азия</option>
-            </optgroup>
-            <optgroup label="🛍 ТРК и Развлечения">
-                <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
-                <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
-                <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
-                <option value="ТРК «Куба»">ТРК «Куба»</option>
-            </optgroup>
-            <optgroup label="🌳 Парки и Природа">
-                <option value="Парк им. Гагарина">Парк им. Гагарина</option>
-                <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
-                <option value="Экопарк">Экопарк (Северо-Запад)</option>
-                <option value="Пешеходная Кировка">Кировка (Прогулка)</option>
-            </optgroup>
-            <optgroup label="✨ Отдых и Термы">
-                <option value="Термы «Voda»">Термы «Voda»</option>
-                <option value="Ледовый каток">Ледовый каток</option>
-            </optgroup>
-        `;
-
-        // Заполнение дат текущего месяца
-        const dateSelect = document.getElementById('date-select');
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth();
-        const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            let option = document.createElement('option');
-            let formattedDay = day < 10 ? '0' + day : day;
-            option.value = `${formattedDay} ${monthsNames[month]}`;
-            option.text = `${day} ${monthsNames[month]}`;
-            if (day === now.getDate()) {
-                option.selected = true;
-            }
-            dateSelect.appendChild(option);
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Private Invitation ✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti для салюта -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #090d16 0%, #1a103c 50%, #2b0c3f 100%);
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
         }
+        .glass {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        select option {
+            background: #1a103c;
+            color: #f8fafc;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
+        }
+        .bunny-anim {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto relative select-none">
 
-        // Логика кнопки "Нет"
-        let noClicks = 0;
-        const noMessages = [
-            "Кнопка сломалась, жми верхнюю 😉",
-            "Сюда нельзя нажимать!",
-            "Система не принимает отказы 🛑",
-            "Ну всё, выбора нет, жми «Да» 💖"
-        ];
+    <!-- Фоновые неоновые свечения -->
+    <div class="absolute top-10 left-5 w-32 h-32 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 right-5 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        window.handleNoClick = function() {
-            const btnNo = document.getElementById('btn-no');
-            if (noClicks < noMessages.length) {
-                btnNo.innerText = noMessages[noClicks];
-                noClicks++;
-                btnNo.style.transform = `scale(${1 - noClicks * 0.08})`;
-            } else {
-                btnNo.style.display = 'none';
+    <!-- Основной контейнер -->
+    <div class="relative z-10 my-auto space-y-4 w-full">
+        
+        <!-- Шапка с зайчиком -->
+        <div class="glass rounded-3xl p-6 text-center shadow-2xl">
+            <div class="text-5xl mb-3 bunny-anim inline-block filter drop-shadow-[0_0_15px_rgba(244,114,182,0.6)]">
+                🐰🤍
+            </div>
+            <h1 class="text-2xl font-black bg-gradient-to-r from-pink-400 via-rose-300 to-purple-400 bg-clip-text text-transparent">
+                Особенное приглашение
+            </h1>
+            <p class="text-xs text-slate-300 mt-1 font-medium tracking-wide">
+                Только для тебя ✨
+            </p>
+        </div>
+
+        <!-- ШАГ 1: Вопрос "Готова пойти со мной на свидание?" -->
+        <div id="step-question" class="glass rounded-3xl p-6 text-center space-y-5" style="display: block;">
+            <h2 class="text-lg font-bold text-pink-200">Готова пойти со мной на свидание? 🥂</h2>
+            <div class="space-y-3">
+                <button type="button" onclick="goToAgeCheck()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base cursor-pointer">
+                    Да, с удовольствием! 💕
+                </button>
+                <button type="button" id="btn-no" onclick="handleNoClick()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-3 rounded-xl text-xs font-medium border border-slate-700/50 transition cursor-pointer">
+                    Нет / Подумаю
+                </button>
+            </div>
+        </div>
+
+        <!-- ШАГ 2: Проверка возраста -->
+        <div id="step-age" class="glass rounded-3xl p-6 text-center space-y-4" style="display: none;">
+            <h2 class="text-base font-bold text-pink-200">Подтверди свой возраст 👇</h2>
+            <p class="text-xs text-slate-400">Это нужно для подбора правильного формата заведения</p>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="selectAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition cursor-pointer">
+                    Младше 18 🍷
+                </button>
+                <button type="button" onclick="selectAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition cursor-pointer">
+                    18+ 🔥
+                </button>
+            </div>
+        </div>
+
+        <!-- ШАГ 3: Выбор места, даты и времени -->
+        <div id="step-booking" class="glass rounded-3xl p-5 space-y-4" style="display: none;">
+            <h2 id="welcome-format-text" class="text-xs font-bold text-pink-300 text-center uppercase tracking-wider mb-1"></h2>
+
+            <!-- Локация -->
+            <div>
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Место встречи (Челябинск):</label>
+                <select id="place-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                    <!-- Заполняется динамически -->
+                </select>
+            </div>
+
+            <!-- Дата -->
+            <div>
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
+                <select id="date-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                    <!-- Заполняется JS -->
+                </select>
+            </div>
+
+            <!-- Время -->
+            <div>
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
+                <select id="time-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                    <option value="12:00">12:00 — Дневной кофе / Прогулка</option>
+                    <option value="14:00">14:00 — Обед / Встреча</option>
+                    <option value="16:00">16:00 — Полдник / Кино</option>
+                    <option value="18:00">18:00 — Вечерний закат / Ужин</option>
+                    <option value="19:30">19:30 — Праздный прайм-тайм</option>
+                    <option value="21:00">21:00 — Ночной движ / Клуб / Бар</option>
+                    <option value="23:00">23:00 — Полночный вайб</option>
+                </select>
+            </div>
+
+            <!-- Кнопка подтверждения -->
+            <div class="pt-2">
+                <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base cursor-pointer">
+                    Подтвердить свидание 💕
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран успеха -->
+        <div id="success-card" class="glass rounded-3xl p-8 text-center space-y-4" style="display: none;">
+            <div class="text-6xl animate-bounce">💖</div>
+            <h2 class="text-xl font-bold text-pink-300">Идеально, договорились!</h2>
+            <p id="success-text" class="text-sm text-slate-300 leading-relaxed">
+                Твой выбор зафиксирован. Готовься к крутому вечеру 🔥
+            </p>
+            <div class="pt-2">
+                <span class="inline-block bg-pink-500/20 text-pink-300 text-xs px-4 py-3 rounded-2xl border border-pink-500/30 font-medium">
+                    Скриншоть этот экран и скидывай мне в телегу 🥂
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Подвал -->
+    <footer class="text-center text-[10px] text-slate-500 py-2 tracking-widest uppercase">
+        Personal Date Engine • Chelyabinsk Edition
+    </footer>
+
+    <!-- СКРИПТ -->
+    <script>
+        window.onload = function() {
+            // Базы мест Челябинска
+            const places18Plus = `
+                <optgroup label="🔥 Бары, Пабы и Легенды">
+                    <option value="Бар «Доска»">Бар «Доска» (Главный движ)</option>
+                    <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
+                    <option value="Gipsy Club">Gipsy Club</option>
+                    <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
+                    <option value="The Бочка">The Бочка</option>
+                    <option value="Malina Bar">Malina Bar</option>
+                    <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
+                    <option value="Garage Underground">Garage Underground</option>
+                </optgroup>
+                <optgroup label="💨 Кальянные и Лаунж">
+                    <option value="Мята Lounge">Мята Lounge</option>
+                    <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
+                    <option value="Облако 53">Облако 53</option>
+                    <option value="DarcDay">DarcDay</option>
+                </optgroup>
+                <optgroup label="🍽 Рестораны">
+                    <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
+                    <option value="Barbaresco">Barbaresco</option>
+                    <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
+                    <option value="Brüdershaft">Brüdershaft</option>
+                </optgroup>
+                <optgroup label="🌳 Прогулки и Ночной город">
+                    <option value="Пешеходная Кировка">Пешеходная Кировка (Ночные бары)</option>
+                    <option value="Набережная Миасс">Набережная реки Миасс</option>
+                </optgroup>
+            `;
+
+            const placesUnder18 = `
+                <optgroup label="☕ Уютные кофейни и Кафе">
+                    <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
+                    <option value="Coffee Luks">Coffee Luks</option>
+                    <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
+                    <option value="Суши-бар / Азия">Суши-бар / Азия</option>
+                </optgroup>
+                <optgroup label="🛍 ТРК и Развлечения">
+                    <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
+                    <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
+                    <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
+                    <option value="ТРК «Куба»">ТРК «Куба»</option>
+                </optgroup>
+                <optgroup label="🌳 Парки и Природа">
+                    <option value="Парк им. Гагарина">Парк им. Гагарина</option>
+                    <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
+                    <option value="Экопарк">Экопарк (Северо-Запад)</option>
+                    <option value="Пешеходная Кировка">Кировка (Прогулка)</option>
+                </optgroup>
+                <optgroup label="✨ Отдых и Термы">
+                    <option value="Термы «Voda»">Термы «Voda»</option>
+                    <option value="Ледовый каток">Ледовый каток</option>
+                </optgroup>
+            `;
+
+            // Заполнение дат текущего месяца
+            const dateSelect = document.getElementById('date-select');
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                let option = document.createElement('option');
+                let formattedDay = day < 10 ? '0' + day : day;
+                option.value = `${formattedDay} ${monthsNames[month]}`;
+                option.text = `${day} ${monthsNames[month]}`;
+                if (day === now.getDate()) {
+                    option.selected = true;
+                }
+                dateSelect.appendChild(option);
             }
+
+            // Логика кнопки "Нет"
+            let noClicks = 0;
+            const noMessages = [
+                "Кнопка сломалась, жми верхнюю 😉",
+                "Сюда нельзя нажимать!",
+                "Система не принимает отказы 🛑",
+                "Ну всё, выбора нет, жми «Да» 💖"
+            ];
+
+            window.handleNoClick = function() {
+                const btnNo = document.getElementById('btn-no');
+                if (noClicks < noMessages.length) {
+                    btnNo.innerText = noMessages[noClicks];
+                    noClicks++;
+                    btnNo.style.transform = `scale(${1 - noClicks * 0.08})`;
+                } else {
+                    btnNo.style.display = 'none';
+                }
+            };
+
+            // Переход к экрану проверки возраста
+            window.goToAgeCheck = function() {
+                document.getElementById('step-question').style.display = 'none';
+                document.getElementById('step-age').style.display = 'block';
+            };
+
+            // Выбор возраста и загрузка нужных мест
+            window.selectAge = function(isAdult) {
+                document.getElementById('step-age').style.display = 'none';
+                document.getElementById('step-booking').style.display = 'block';
+
+                const placeSelect = document.getElementById('place-select');
+                const formatText = document.getElementById('welcome-format-text');
+
+                if (isAdult) {
+                    placeSelect.innerHTML = places18Plus;
+                    formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
+                } else {
+                    placeSelect.innerHTML = placesUnder18;
+                    formatText.innerText = "✨ Уютный формат и романтика";
+                }
+            };
+
+            // Финал подтверждения
+            window.acceptDate = function() {
+                const place = document.getElementById('place-select').value;
+                const date = document.getElementById('date-select').value;
+                const time = document.getElementById('time-select').value;
+
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
+                });
+
+                document.getElementById('step-booking').style.display = 'none';
+                document.getElementById('success-card').style.display = 'block';
+
+                document.getElementById('success-text').innerHTML = `
+                    📍 Место: <b class="text-pink-300">${place}</b><br>
+                    📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br><br>
+                    Всё записано. Жду тебя! 🔥`;
+            };
         };
-
-        // Переход к экрану проверки возраста
-        window.goToAgeCheck = function() {
-            document.getElementById('step-question').style.display = 'none';
-            document.getElementById('step-age').style.display = 'block';
-        };
-
-        // Выбор возраста и загрузка нужных мест
-        window.selectAge = function(isAdult) {
-            document.getElementById('step-age').style.display = 'none';
-            document.getElementById('step-booking').style.display = 'block';
-
-            const placeSelect = document.getElementById('place-select');
-            const formatText = document.getElementById('welcome-format-text');
-
-            if (isAdult) {
-                placeSelect.innerHTML = places18Plus;
-                formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
-            } else {
-                placeSelect.innerHTML = placesUnder18;
-                formatText.innerText = "✨ Уютный формат и романтика";
-            }
-        };
-
-        // Финал подтверждения
-        window.acceptDate = function() {
-            const place = document.getElementById('place-select').value;
-            const date = document.getElementById('date-select').value;
-            const time = document.getElementById('time-select').value;
-
-            confetti({
-                particleCount: 120,
-                spread: 80,
-                origin: { y: 0.6 },
-                colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
-            });
-
-            document.getElementById('step-booking').style.display = 'none';
-            document.getElementById('success-card').style.display = 'block';
-
-            document.getElementById('success-text').innerHTML = `
-                📍 Место: <b class="text-pink-300">${place}</b><br>
-                📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br><br>
-                Всё записано. Жду тебя! 🔥`;
-        };
-    };
-</script>
+    </script>
+</body>
+</html>
