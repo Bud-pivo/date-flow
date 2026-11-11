@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Personal Date Manager</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        select option {
+            background: #1e1b4b;
+            color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto">
+
+    <!-- Шапка с персонализацией -->
+    <div class="glass rounded-3xl p-5 text-center shadow-2xl mt-2">
+        <img id="girl-photo" src="https://via.placeholder.com/150" alt="Photo" class="w-20 h-20 rounded-full mx-auto border-2 border-pink-500/50 object-cover mb-2 shadow-lg">
+        <h1 class="text-xl font-bold bg-gradient-to-r from-pink-400 to-rose-300 bg-clip-text text-transparent">
+            Привет, <span id="girl-name">Красотка</span> ✨
+        </h1>
+        <p class="text-xs text-slate-400">Выбери место и время для нашей встречи</p>
+    </div>
+
+    <!-- Шаг 1: Проверка возраста -->
+    <div id="step-age" class="glass rounded-2xl p-5 my-auto space-y-3">
+        <h2 class="text-sm font-semibold text-pink-300 text-center">Подтверди свой возраст:</h2>
+        <div class="grid grid-cols-3 gap-2">
+            <button onclick="checkAge(16)" class="bg-slate-800/80 py-3 rounded-xl border border-slate-700 active:scale-95 transition text-sm">16-17</button>
+            <button onclick="checkAge(18)" class="bg-gradient-to-r from-pink-600 to-rose-600 py-3 rounded-xl font-medium active:scale-95 transition text-sm">18-21</button>
+            <button onclick="checkAge(22)" class="bg-gradient-to-r from-pink-600 to-rose-600 py-3 rounded-xl font-medium active:scale-95 transition text-sm">22+</button>
+        </div>
+    </div>
+
+    <!-- Шаг 2: Выбор места, даты и времени -->
+    <div id="step-booking" class="glass rounded-2xl p-4 my-auto hidden space-y-3">
+        
+        <!-- Выбор категории мест Челябинска -->
+        <div>
+            <label class="block text-xs font-medium text-pink-300 mb-1">📍 Локация (Челябинск):</label>
+            <select id="place-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
+                <optgroup label="🍸 Клубы и Бары">
+                    <option value="Gipsy Club Chelyabinsk">Gipsy Club</option>
+                    <option value="Meet Point (на Кировке)">Meet Point</option>
+                    <option value="The Бочка">The Бочка</option>
+                    <option value="Malina Bar">Malina Bar</option>
+                </optgroup>
+                <optgroup label="🍽 Рестораны">
+                    <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака»</option>
+                    <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
+                    <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
+                    <option value="Barbaresco">Barbaresco</option>
+                </optgroup>
+                <optgroup label="🛍 ТРК и Развлечения">
+                    <option value="ТРК «Мегаполис»">Мегаполис (Кино / Набережная)</option>
+                    <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
+                    <option value="ТРК «Родник»">ТРК «Родник»</option>
+                    <option value="Кировка (Пешеходная зона)">Кировка (Пешеходная зона)</option>
+                    </optgroup>
+                <optgroup label="🌳 Парки">
+                    <option value="Парк им. Гагарина">Парк им. Гагарина</option>
+                    <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
+                    <option value="Набережная реки Миасс">Набережная Миасс</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <!-- Выбор даты (с 1 числа месяца) -->
+        <div>
+            <label class="block text-xs font-medium text-pink-300 mb-1">📅 Дата:</label>
+            <select id="date-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
+                <!-- Динамически заполняется скриптом -->
+            </select>
+        </div>
+
+        <!-- Выбор времени (начиная с 00:00) -->
+        <div>
+            <label class="block text-xs font-medium text-pink-300 mb-1">⏰ Время:</label>
+            <select id="time-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
+                <option value="00:00">00:00 (Ночной движ)</option>
+                <option value="01:00">01:00</option>
+                <option value="02:00">02:00</option>
+                <option value="12:00">12:00 (День)</option>
+                <option value="14:00">14:00 (Обед / Кофе)</option>
+                <option value="16:00">16:00 (Полдник)</option>
+                <option value="18:00">18:00 (Вечер)</option>
+                <option value="19:00">19:00 (Прайм-тайм)</option>
+                <option value="20:00">20:00 (Кафе / Прогулка)</option>
+                <option value="21:00">21:00 (Ночь / Клуб)</option>
+                <option value="22:00">22:00</option>
+                <option value="23:00">23:00</option>
+            </select>
+        </div>
+
+        <button onclick="submitBooking()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 py-3.5 rounded-xl font-bold text-white shadow-lg active:scale-95 transition mt-2">
+            Подтвердить свидание ✨
+        </button>
+    </div>
+
+    <!-- Сообщение об отказе для младше 18 -->
+    <div id="step-denied" class="glass rounded-2xl p-6 text-center my-auto hidden">
+        <div class="text-4xl mb-2">🛑</div>
+        <h3 class="text-lg font-bold text-rose-400">Упс, не получится!</h3>
+        <p class="text-sm text-slate-300 mt-2">Я хожу на свидания только с девушками 18+. Расти скорее 😉</p>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // Заполняем даты текущего месяца (с 1 числа по конец месяца)
+        const dateSelect = document.getElementById('date-select');
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            let option = document.createElement('option');
+            let formattedDay = day < 10 ? '0' + day : day;
+            option.value = ${formattedDay} ${monthsNames[month]};
+            option.text = ${day} ${monthsNames[month]};
+            
+            if (day === now.getDate()) {
+                option.selected = true;
+            }
+            dateSelect.appendChild(option);
+        }
+
+        function checkAge(age) {
+            if (age < 18) {
+                document.getElementById('step-age').classList.add('hidden');
+                document.getElementById('step-denied').classList.remove('hidden');
+            } else {
+                document.getElementById('step-age').classList.add('hidden');
+                document.getElementById('step-booking').classList.remove('hidden');
+            }
+        }
+        function submitBooking() {
+            const place = document.getElementById('place-select').value;
+            const date = document.getElementById('date-select').value;
+            const time = document.getElementById('time-select').value;
+
+            tg.sendData(JSON.stringify({
+                action: "book_date",
+                place: place,
+                date: date,
+                time: time
+            }));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
