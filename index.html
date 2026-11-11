@@ -55,6 +55,33 @@
             box-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
             outline: none;
         }
+        /* Кастомные красивые радио-кнопки */
+        .radio-card input[type="radio"] {
+            display: none;
+        }
+        .radio-card input[type="radio"] + label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(244, 114, 182, 0.2);
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        .radio-card input[type="radio"]:checked + label {
+            background: rgba(244, 114, 182, 0.2);
+            border-color: #f472b6;
+            color: #fbcfe8;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
+            transform: scale(1.02);
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
             50% { transform: translateY(-10px) scale(1.05) rotate(5deg); }
@@ -111,7 +138,7 @@
             </div>
         </div>
 
-        <!-- ШАГ 2 -->
+        <!-- ШАГ 2: Ввод возраста -->
         <div id="step-age" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-lg font-bold text-pink-200">Сколько тебе лет? 🌸</h2>
             <p class="text-xs text-slate-300/80">Введи свой возраст, чтобы я подобрал идеальный план</p>
@@ -120,25 +147,44 @@
                 <input type="number" id="age-input" min="1" max="99" placeholder="Твой возраст..." class="input-style w-32 py-3 rounded-2xl text-white placeholder-slate-500 mx-auto block">
             </div>
             
-            <!-- Блок для кнопки Продолжить (скрывается при возрасте < 15) -->
+            <!-- Блок для кнопки Продолжить (скрывается при возрасте < 16) -->
             <div id="age-action-block" class="pt-2">
                 <button type="button" onclick="submitAge()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 py-3.5 rounded-2xl font-bold text-white shadow-lg active:scale-95 transition cursor-pointer">
                     Продолжить ✨
                 </button>
             </div>
 
-            <!-- Блок для отказа (появляется при возрасте < 15) -->
+            <!-- Блок для отказа (появляется при возрасте < 16) -->
             <div id="age-error-block" class="pt-2" style="display: none;">
                 <div class="bg-rose-500/20 border border-rose-500/50 p-4 rounded-2xl">
                     <p class="text-sm text-rose-200 font-medium">
                         Ой, извини, но тебе еще рано со мной гулять, ты слишком маленькая для таких приключений 🙈 <br><br>
-                        <span class="font-bold text-white">Подрасти немного! 🌸</span>
+                        <span class="font-bold text-white">Подрасти до 16 лет! 🌸</span>
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- ШАГ 3 -->
+        <!-- НОВЫЙ ШАГ 2.5: Подтверждение возраста с гифкой -->
+        <div id="step-age-confirm" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
+            <h2 class="text-lg font-bold text-pink-200">Точно-точно правильный возраст? 😏</h2>
+            
+            <!-- Угарная гифка -->
+            <div class="flex justify-center py-2">
+                <img src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="Funny monkey" class="rounded-2xl w-48 h-48 object-cover shadow-[0_0_20px_rgba(244,114,182,0.4)] border border-pink-500/30">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="confirmAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition cursor-pointer">
+                    Не, соврала 😅
+                </button>
+                <button type="button" onclick="confirmAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition cursor-pointer">
+                    Да, всё верно! 💯
+                </button>
+            </div>
+        </div>
+
+        <!-- ШАГ 3: Бронирование -->
         <div id="step-booking" class="glass rounded-[2.5rem] p-5 space-y-4" style="display: none;">
             <h2 id="welcome-format-text" class="text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2"></h2>
 
@@ -149,25 +195,43 @@
                 </select>
             </div>
 
-            <!-- Дата -->
-            <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
-                <select id="date-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
-                </select>
+            <!-- Дата и Время в одну строку -->
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
+                    <select id="date-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
+                    <select id="time-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
+                    </select>
+                </div>
             </div>
 
-            <!-- Время -->
-            <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
-                <select id="time-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
-                </select>
+            <!-- НОВОЕ: Кто платит? -->
+            <div class="pt-1">
+                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">💸 Кто платит?</label>
+                <div class="grid grid-cols-1 gap-2 radio-card">
+                    <div>
+                        <input type="radio" id="pay-me" name="payment" value="Я угощаю (мужчина платит)" checked>
+                        <label for="pay-me">Я угощаю, все дела 😎</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="pay-her" name="payment" value="Она ведет за свой кэш">
+                        <label for="pay-her">Она ведет за свой кэш (Я в шоке 😱)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="pay-split" name="payment" value="Пополам (50/50)">
+                        <label for="pay-split">Пополам (50/50) 🤝</label>
+                    </div>
+                </div>
             </div>
 
             <!-- Номер телефона -->
             <div class="pt-2">
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📱 Твой номер телефона:</label>
                 <input type="tel" id="phone-input" placeholder="+7 (999) 123-45-67" class="input-phone w-full p-3.5 rounded-2xl">
-                <p class="text-[10px] text-slate-400 mt-1 text-center">Чтобы я мог скинуть тебе детали встречи 😉</p>
             </div>
 
             <!-- Кнопка подтверждения -->
@@ -257,36 +321,63 @@
 
             const timeSelect = document.getElementById('time-select');
             const timeOptions18 = `
-                <option value="16:00">16:00 — Дневная движуха</option>
-                <option value="18:00">18:00 — Вечерний закат / Ужин</option>
-                <option value="19:30">19:30 — Прайм-тайм</option>
-                <option value="21:00">21:00 — Ночной движ / Клуб / Бар</option>
-                <option value="23:00">23:00 — Полночный вайб</option>
+                <option value="16:00">16:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:30">19:30</option>
+                <option value="21:00">21:00</option>
+                <option value="23:00">23:00</option>
             `;
             const timeOptionsUnder18 = `
-                <option value="12:00">12:00 — Дневной кофе / Прогулка</option>
-                <option value="14:00">14:00 — Обед / Встреча</option>
-                <option value="16:00">16:00 — Полдник / Кино</option>
-                <option value="18:00">18:00 — Вечерняя прогулка</option>
-                <option value="19:00">19:00 — Уютный вечер дома</option>
+                <option value="12:00">12:00</option>
+                <option value="14:00">14:00</option>
+                <option value="16:00">16:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00</option>
             `;
 
+            // --- Генерация дат на 3 месяца вперед ---
             const dateSelect = document.getElementById('date-select');
             const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
             const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysOfWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                let option = document.createElement('option');
-                let formattedDay = day < 10 ? '0' + day : day;
-                option.value = `${formattedDay} ${monthsNames[month]}`;
-                option.text = `${day} ${monthsNames[month]}`;
-                if (day === now.getDate()) {
-                    option.selected = true;
+            // Очищаем селект перед заполнением
+            dateSelect.innerHTML = '';
+
+            // Генерируем даты на текущий и 2 следующих месяца
+            for (let i = 0; i < 3; i++) {
+                let targetMonth = now.getMonth() + i;
+                let targetYear = now.getFullYear();
+                
+                // Корректировка года при переходе через декабрь
+                if (targetMonth > 11) {
+                    targetMonth -= 12;
+                    targetYear += 1;
                 }
-                dateSelect.appendChild(option);
+
+                let optgroup = document.createElement('optgroup');
+                optgroup.label = `${monthsNames[targetMonth]} ${targetYear}`;
+
+                const daysInMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    // Если это текущий месяц, пропускаем прошедшие дни
+                    if (i === 0 && day < now.getDate()) continue;
+
+                    let option = document.createElement('option');
+                    let dateObj = new Date(targetYear, targetMonth, day);
+                    let dayOfWeek = daysOfWeek[dateObj.getDay()];
+                    
+                    let formattedDay = day < 10 ? '0' + day : day;
+                    option.value = `${formattedDay} ${monthsNames[targetMonth]} (${dayOfWeek})`;
+                    option.text = `${day} ${monthsNames[targetMonth]} - ${dayOfWeek}`;
+                    
+                    if (i === 0 && day === now.getDate()) {
+                        option.selected = true;
+                    }
+                    optgroup.appendChild(option);
+                }
+                dateSelect.appendChild(optgroup);
             }
 
             // --- Логика кнопки "Нет" ---
@@ -310,13 +401,13 @@
             };
 
             // --- Проверка возраста в реальном времени ---
-            // Как только она вводит цифру, мы сразу проверяем, не меньше ли ей 15
             document.getElementById('age-input').addEventListener('input', function() {
                 const age = parseInt(this.value);
                 const actionBlock = document.getElementById('age-action-block');
                 const errorBlock = document.getElementById('age-error-block');
 
-                if (!isNaN(age) && age > 0 && age < 15) {
+                // Если возраст меньше 16, скрываем кнопку "Продолжить" и показываем отказ
+                if (!isNaN(age) && age > 0 && age < 16) {
                     actionBlock.style.display = 'none';
                     errorBlock.style.display = 'block';
                 } else {
@@ -331,6 +422,8 @@
                 setTimeout(() => document.getElementById('age-input').focus(), 100);
             };
 
+            let currentAge = 0;
+
             window.submitAge = function() {
                 const age = parseInt(document.getElementById('age-input').value);
                 
@@ -339,18 +432,36 @@
                     return;
                 }
 
-                // Защита на случай, если как-то обошли проверку
-                if (age < 15) {
-                    return; 
+                if (age < 16) {
+                    return; // Защита
                 }
 
+                currentAge = age;
+
+                // Переходим на экран подтверждения с гифкой
                 document.getElementById('step-age').style.display = 'none';
+                document.getElementById('step-age-confirm').style.display = 'block';
+            };
+
+            window.confirmAge = function(isConfirmed) {
+                if (!isConfirmed) {
+                    // Если соврала, кидаем обратно на ввод
+                    document.getElementById('step-age-confirm').style.display = 'none';
+                    document.getElementById('step-age').style.display = 'block';
+                    document.getElementById('age-input').value = '';
+                    document.getElementById('age-error-block').style.display = 'none';
+                    document.getElementById('age-action-block').style.display = 'block';
+                    return;
+                }
+
+                // Если всё ок, идем дальше
+                document.getElementById('step-age-confirm').style.display = 'none';
                 document.getElementById('step-booking').style.display = 'block';
 
                 const placeSelect = document.getElementById('place-select');
                 const formatText = document.getElementById('welcome-format-text');
 
-                if (age >= 18) {
+                if (currentAge >= 18) {
                     placeSelect.innerHTML = places18Plus;
                     timeSelect.innerHTML = timeOptions18;
                     formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
@@ -368,6 +479,10 @@
                 const date = document.getElementById('date-select').value;
                 const time = document.getElementById('time-select').value;
                 const phone = document.getElementById('phone-input').value.trim();
+                
+                // Получаем выбранный вариант оплаты
+                const paymentRadio = document.querySelector('input[name="payment"]:checked');
+                const payment = paymentRadio ? paymentRadio.value : 'Не указано';
 
                 const digitsOnly = phone.replace(/\D/g, '');
                 if (digitsOnly.length < 10) {
@@ -398,11 +513,20 @@
 
                 let extraComment = "";
                 if (place.includes("дома")) extraComment = "Захвати свое любимое кино, я куплю вкусняшки! 🍿";
-                if (place.includes("тачке")) extraComment = "Скажи подруге собираться, нас ждет незабываемый вечер! 😎";
+                if (place.includes("тачке")) {
+                    if (payment === "Она ведет за свой кэш") {
+                        extraComment = "АХАХАХАХАХ, она еще и за бензин платит! Чисто на угарке залетим! ⛽🔥";
+                    } else if (payment === "Пополам (50/50)") {
+                        extraComment = "Бензин пополам, музыка на полную. Погнали! 🏎💨";
+                    } else {
+                        extraComment = "Скажи подруге собираться, бензин за мной! 😎";
+                    }
+                }
 
                 document.getElementById('success-text').innerHTML = `
                     📍 Место: <b class="text-pink-300">${place}</b><br>
                     📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br>
+                    💸 Оплата: <b class="text-pink-300">${payment}</b><br>
                     📱 Телефон: <b class="text-pink-300">${phone}</b><br><br>
                     ${extraComment ? `<span class="text-xs text-pink-200 block mt-2 mb-2">${extraComment}</span>` : ''}
                     <span class="text-pink-400 font-bold">Всё записано. Жду тебя! 🔥</span>`;
