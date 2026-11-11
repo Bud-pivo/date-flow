@@ -25,7 +25,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto">
 
-    <!-- Шапка с персонализацией -->
+    <!-- Персонализированная шапка (её фото и имя из ссылки) -->
     <div class="glass rounded-3xl p-5 text-center shadow-2xl mt-2">
         <img id="girl-photo" src="https://via.placeholder.com/150" alt="Photo" class="w-20 h-20 rounded-full mx-auto border-2 border-pink-500/50 object-cover mb-2 shadow-lg">
         <h1 class="text-xl font-bold bg-gradient-to-r from-pink-400 to-rose-300 bg-clip-text text-transparent">
@@ -47,7 +47,6 @@
     <!-- Шаг 2: Выбор места, даты и времени -->
     <div id="step-booking" class="glass rounded-2xl p-4 my-auto hidden space-y-3">
         
-        <!-- Выбор категории мест Челябинска -->
         <div>
             <label class="block text-xs font-medium text-pink-300 mb-1">📍 Локация (Челябинск):</label>
             <select id="place-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
@@ -77,15 +76,12 @@
             </select>
         </div>
 
-        <!-- Выбор даты (с 1 числа месяца) -->
         <div>
             <label class="block text-xs font-medium text-pink-300 mb-1">📅 Дата:</label>
             <select id="date-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
-                <!-- Динамически заполняется скриптом -->
             </select>
         </div>
 
-        <!-- Выбор времени (начиная с 00:00) -->
         <div>
             <label class="block text-xs font-medium text-pink-300 mb-1">⏰ Время:</label>
             <select id="time-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
@@ -105,11 +101,10 @@
         </div>
 
         <button onclick="submitBooking()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 py-3.5 rounded-xl font-bold text-white shadow-lg active:scale-95 transition mt-2">
-            Подтвердить свидание ✨
+            Отправить на согласование ✨
         </button>
     </div>
 
-    <!-- Сообщение об отказе для младше 18 -->
     <div id="step-denied" class="glass rounded-2xl p-6 text-center my-auto hidden">
         <div class="text-4xl mb-2">🛑</div>
         <h3 class="text-lg font-bold text-rose-400">Упс, не получится!</h3>
@@ -120,7 +115,17 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Заполняем даты текущего месяца (с 1 числа по конец месяца)
+        const urlParams = new URLSearchParams(window.location.search);
+        const girlName = urlParams.get('name');
+        const girlPhoto = urlParams.get('photo');
+
+        if (girlName) {
+            document.getElementById('girl-name').innerText = decodeURIComponent(girlName);
+        }
+        if (girlPhoto) {
+            document.getElementById('girl-photo').src = decodeURIComponent(girlPhoto);
+        }
+
         const dateSelect = document.getElementById('date-select');
         const now = new Date();
         const year = now.getFullYear();
@@ -156,7 +161,7 @@
             const time = document.getElementById('time-select').value;
 
             tg.sendData(JSON.stringify({
-                action: "book_date",
+                girl: girlName || "Неизвестно",
                 place: place,
                 date: date,
                 time: time
