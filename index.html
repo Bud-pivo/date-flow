@@ -10,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
-            /* Более нежный и романтичный градиент */
             background: linear-gradient(135deg, #1f0b36 0%, #3a154d 50%, #661a4d 100%);
             color: #f8fafc;
             font-family: system-ui, -apple-system, sans-serif;
@@ -23,7 +22,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,192,203, 0.1);
         }
-        /* Стилизация скролла в выпадающих списках для красоты */
         select option {
             background: #2a103c;
             color: #f8fafc;
@@ -42,7 +40,22 @@
             box-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
             outline: none;
         }
-        /* Анимации */
+        /* Стили для телефона */
+        .input-phone {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .input-phone:focus {
+            border-color: #f472b6;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
+            outline: none;
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
             50% { transform: translateY(-10px) scale(1.05) rotate(5deg); }
@@ -66,17 +79,13 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto relative select-none">
 
-    <!-- Фоновые падающие элементы (сердечки и цветочки) -->
     <div id="falling-container"></div>
     
-    <!-- Фоновые неоновые свечения -->
     <div class="absolute top-10 left-5 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-10 right-5 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-    <!-- Основной контейнер -->
     <div class="relative z-10 my-auto space-y-5 w-full">
         
-        <!-- Шапка с зайчиком -->
         <div class="glass rounded-[2.5rem] p-6 text-center shadow-2xl relative overflow-hidden">
             <div class="text-6xl mb-2 bunny-anim inline-block filter drop-shadow-[0_0_20px_rgba(244,114,182,0.8)]">
                 🐰💖
@@ -89,7 +98,7 @@
             </p>
         </div>
 
-        <!-- ШАГ 1: Вопрос "Готова пойти со мной на свидание?" -->
+        <!-- ШАГ 1 -->
         <div id="step-question" class="glass rounded-[2.5rem] p-6 text-center space-y-6" style="display: block;">
             <h2 class="text-xl font-bold text-pink-100">Готова пойти со мной на свидание? 🥂</h2>
             <div class="space-y-4 pt-2">
@@ -102,7 +111,7 @@
             </div>
         </div>
 
-        <!-- ШАГ 2: Ввод возраста -->
+        <!-- ШАГ 2 -->
         <div id="step-age" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-lg font-bold text-pink-200">Сколько тебе лет? 🌸</h2>
             <p class="text-xs text-slate-300/80">Введи свой возраст, чтобы я подобрал идеальный план</p>
@@ -118,36 +127,40 @@
             </div>
         </div>
 
-        <!-- ШАГ 3: Выбор места, даты и времени -->
-        <div id="step-booking" class="glass rounded-[2.5rem] p-5 space-y-5" style="display: none;">
+        <!-- ШАГ 3 -->
+        <div id="step-booking" class="glass rounded-[2.5rem] p-5 space-y-4" style="display: none;">
             <h2 id="welcome-format-text" class="text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2"></h2>
 
             <!-- Локация -->
             <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">📍 Куда пойдем?</label>
-                <select id="place-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3.5 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
-                    <!-- Заполняется динамически -->
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Куда пойдем?</label>
+                <select id="place-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
                 </select>
             </div>
 
             <!-- Дата -->
             <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">📅 Дата:</label>
-                <select id="date-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3.5 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
-                    <!-- Заполняется JS -->
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
+                <select id="date-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
                 </select>
             </div>
 
             <!-- Время -->
             <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">⏰ Время:</label>
-                <select id="time-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3.5 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
-                    <!-- Заполняется JS -->
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
+                <select id="time-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
                 </select>
             </div>
 
+            <!-- НОВОЕ: Номер телефона -->
+            <div class="pt-2">
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📱 Твой номер телефона:</label>
+                <input type="tel" id="phone-input" placeholder="+7 (999) 123-45-67" class="input-phone w-full p-3.5 rounded-2xl">
+                <p class="text-[10px] text-slate-400 mt-1 text-center">Чтобы я мог скинуть тебе детали встречи 😉</p>
+            </div>
+
             <!-- Кнопка подтверждения -->
-            <div class="pt-3">
+            <div class="pt-2">
                 <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 py-4 rounded-3xl font-bold text-white shadow-[0_0_30px_rgba(244,114,182,0.5)] active:scale-95 transition text-base cursor-pointer">
                     Подтвердить свидание 💕
                 </button>
@@ -158,9 +171,8 @@
         <div id="success-card" class="glass rounded-[2.5rem] p-8 text-center space-y-4" style="display: none;">
             <div class="text-7xl animate-bounce filter drop-shadow-[0_0_15px_rgba(244,114,182,0.8)]">💖</div>
             <h2 class="text-2xl font-bold text-pink-300">Идеально, договорились!</h2>
-            <p id="success-text" class="text-sm text-slate-200 leading-relaxed bg-slate-900/50 p-4 rounded-2xl border border-pink-500/20">
-                Твой выбор зафиксирован. Готовься к крутому вечеру 🔥
-            </p>
+            <div id="success-text" class="text-sm text-slate-200 leading-relaxed bg-slate-900/50 p-5 rounded-2xl border border-pink-500/20 text-left">
+            </div>
             <div class="pt-2">
                 <span class="inline-block bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-200 text-xs px-5 py-4 rounded-2xl border border-pink-500/30 font-medium">
                     Скриншоть этот экран и скидывай мне в телегу 🥂
@@ -170,15 +182,13 @@
 
     </div>
 
-    <!-- Подвал -->
     <footer class="text-center text-[10px] text-pink-300/50 py-4 tracking-widest uppercase font-medium">
         Personal Date Engine • Chelyabinsk Edition
     </footer>
 
-    <!-- СКРИПТ -->
     <script>
         window.onload = function() {
-            // --- Генерация падающих сердечек и цветочков ---
+            // --- Генерация падающих сердечек ---
             const fallingContainer = document.getElementById('falling-container');
             const emojis = ['💖', '🌸', '✨', '💕', '🌺', '💗'];
             
@@ -187,19 +197,13 @@
                 el.classList.add('falling-item');
                 el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
                 el.style.left = Math.random() * 100 + 'vw';
-                el.style.animationDuration = (Math.random() * 3 + 4) + 's'; // От 4 до 7 секунд
+                el.style.animationDuration = (Math.random() * 3 + 4) + 's';
                 el.style.opacity = Math.random() * 0.6 + 0.4;
                 el.style.fontSize = (Math.random() * 10 + 15) + 'px';
                 
                 fallingContainer.appendChild(el);
-                
-                // Удаляем элемент после завершения анимации, чтобы не засорять DOM
-                setTimeout(() => {
-                    el.remove();
-                }, 7000);
+                setTimeout(() => el.remove(), 7000);
             }
-            
-            // Спавним элементы постоянно
             setInterval(createFallingItem, 300);
 
             // --- Данные локаций ---
@@ -212,23 +216,13 @@
                     <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
                     <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
                     <option value="The Бочка">The Бочка</option>
-                    <option value="Malina Bar">Malina Bar</option>
                 </optgroup>
                 <optgroup label="💨 Кальянные и Лаунж">
                     <option value="Мята Lounge">Мята Lounge</option>
-                    <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
                     <option value="Облако 53">Облако 53</option>
-                </optgroup>
-                <optgroup label="🍽 Рестораны">
-                    <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
-                    <option value="Barbaresco">Barbaresco</option>
-                    <option value="Brüdershaft">Brüdershaft</option>
                 </optgroup>
                 <optgroup label="🏠 Уютные места">
                     <option value="У меня дома">Посиделки у меня дома 🏠 (все дела)</option>
-                </optgroup>
-                <optgroup label="🌳 Прогулки и Ночной город">
-                    <option value="Набережная Миасс">Набережная реки Миасс (Ночью)</option>
                 </optgroup>
             `;
 
@@ -244,17 +238,12 @@
                 </optgroup>
                 <optgroup label="🌳 Парки и Природа">
                     <option value="Парк им. Гагарина">Парк им. Гагарина (Прогулка)</option>
-                    <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
                 </optgroup>
                 <optgroup label="🏠 Уютные места">
                     <option value="У меня дома">Посиделки у меня дома 🏠 (чай, кино)</option>
                 </optgroup>
-                <optgroup label="✨ Отдых">
-                    <option value="Ледовый каток">Ледовый каток</option>
-                </optgroup>
             `;
 
-            // Переменные для времени
             const timeSelect = document.getElementById('time-select');
             const timeOptions18 = `
                 <option value="16:00">16:00 — Дневная движуха</option>
@@ -271,7 +260,6 @@
                 <option value="19:00">19:00 — Уютный вечер дома</option>
             `;
 
-            // Заполнение дат текущего месяца
             const dateSelect = document.getElementById('date-select');
             const now = new Date();
             const year = now.getFullYear();
@@ -310,11 +298,9 @@
                 }
             };
 
-            // --- Переходы ---
             window.goToAgeCheck = function() {
                 document.getElementById('step-question').style.display = 'none';
                 document.getElementById('step-age').style.display = 'block';
-                // Фокусируемся на инпуте для удобства
                 setTimeout(() => document.getElementById('age-input').focus(), 100);
             };
 
@@ -345,13 +331,20 @@
                 }
             };
 
-            // --- Финал ---
             window.acceptDate = function() {
                 const place = document.getElementById('place-select').value;
                 const date = document.getElementById('date-select').value;
                 const time = document.getElementById('time-select').value;
+                const phone = document.getElementById('phone-input').value.trim();
 
-                // Большой красивый салют из сердечек
+                // Проверка номера телефона
+                const digitsOnly = phone.replace(/\D/g, '');
+                if (digitsOnly.length < 10) {
+                    alert("Пожалуйста, введи корректный номер телефона (минимум 10 цифр) 📱");
+                    return;
+                }
+
+                // Салют
                 var duration = 3 * 1000;
                 var animationEnd = Date.now() + duration;
                 var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff', '#fda4af'] };
@@ -362,11 +355,9 @@
 
                 var interval = setInterval(function() {
                     var timeLeft = animationEnd - Date.now();
-
                     if (timeLeft <= 0) {
                         return clearInterval(interval);
                     }
-
                     var particleCount = 50 * (timeLeft / duration);
                     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
                     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
@@ -375,16 +366,16 @@
                 document.getElementById('step-booking').style.display = 'none';
                 document.getElementById('success-card').style.display = 'block';
 
-                // Если выбрали хату или тачку, добавляем милые комментарии
                 let extraComment = "";
                 if (place.includes("дома")) extraComment = "Захвати свое любимое кино, я куплю вкусняшки! 🍿";
                 if (place.includes("тачке")) extraComment = "Скажи подруге собираться, нас ждет незабываемый вечер! 😎";
 
                 document.getElementById('success-text').innerHTML = `
                     📍 Место: <b class="text-pink-300">${place}</b><br>
-                    📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br><br>
-                    ${extraComment ? `<span class="text-xs text-pink-200 block mt-2">${extraComment}</span>` : ''}
-                    Всё записано. Жду тебя! 🔥`;
+                    📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br>
+                    📱 Телефон: <b class="text-pink-300">${phone}</b><br><br>
+                    ${extraComment ? `<span class="text-xs text-pink-200 block mt-2 mb-2">${extraComment}</span>` : ''}
+                    <span class="text-pink-400 font-bold">Всё записано. Жду тебя! 🔥</span>`;
             };
         };
     </script>
