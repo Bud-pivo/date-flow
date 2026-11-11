@@ -44,7 +44,7 @@
     <!-- Основной контейнер -->
     <div class="relative z-10 my-auto space-y-4">
         
-        <!-- Шапка с зайчиком и романтикой -->
+        <!-- Шапка с зайчиком -->
         <div class="glass rounded-3xl p-6 text-center shadow-2xl">
             <div class="text-5xl mb-3 bunny-anim inline-block filter drop-shadow-[0_0_15px_rgba(244,114,182,0.6)]">
                 🐰🤍
@@ -61,7 +61,7 @@
         <div id="step-question" class="glass rounded-3xl p-6 text-center space-y-5">
             <h2 class="text-lg font-bold text-pink-200">Готова пойти со мной на свидание? 🥂</h2>
             <div class="space-y-3">
-                <button type="button" onclick="goToBooking()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base">
+                <button type="button" onclick="goToAgeCheck()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base">
                     Да, с удовольствием! 💕
                 </button>
                 <button type="button" id="btn-no" onclick="handleNoClick()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-3 rounded-xl text-xs font-medium border border-slate-700/50 transition">
@@ -70,69 +70,40 @@
             </div>
         </div>
 
-        <!-- ШАГ 2: Выбор места (ВСЕ МЕСТА ЧЕЛЯБИНСКА), Даты и Времени (скрыт до нажатия "Да") -->
-        <div id="step-booking" class="glass rounded-3xl p-5 space-y-4 hidden">
-            
-            <h2 class="text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2">Выбери формат и детали встречи 👇</h2>
+        <!-- ШАГ 2: Проверка возраста -->
+        <div id="step-age" class="glass rounded-3xl p-6 text-center space-y-4 hidden">
+            <h2 class="text-base font-bold text-pink-200">Подтверди свой возраст 👇</h2>
+            <p class="text-xs text-slate-400">Это нужно для подбора правильного формата заведения</p>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="selectAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition">
+                    Младше 18 🍷
+                </button>
+                <button type="button" onclick="selectAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition">
+                    18+ 🔥
+                </button>
+            </div>
+        </div>
 
-            <!-- Локация (Абсолютно все основные места Челябинска) -->
+        <!-- ШАГ 3: Выбор места, даты и времени -->
+        <div id="step-booking" class="glass rounded-3xl p-5 space-y-4 hidden">
+            <h2 id="welcome-format-text" class="text-xs font-bold text-pink-300 text-center uppercase tracking-wider mb-1"></h2>
+
+            <!-- Локация -->
             <div>
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Место встречи (Челябинск):</label>
                 <select id="place-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
-                    <optgroup label="🍸 Клубы и Ночной движ">
-                        <option value="Gipsy Club">Gipsy Club</option>
-                        <option value="Meet Point на Кировке">Meet Point (на Кировке)</option>
-                        <option value="The Бочка">The Бочка</option>
-                        <option value="Malina Bar">Malina Bar</option>
-                        <option value="Garage Underground">Garage Underground</option>
-                        <option value="Облако 53">Облако 53 (Бар)</option>
-                    </optgroup>
-                    <optgroup label="🍽 Рестораны и Гастрономия">
-                        <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Виденгоф)</option>
-                        <option value="Barbaresco">Barbaresco</option>
-                        <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
-                        <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
-                        <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
-                        <option value="Brუdershaft">Brüdershaft (Брюдершафт)</option>
-                        <option value="Tsatsiki">Tsatsiki (Греческий)</option>
-                        <option value="Le Vache">Le Vache / Steakman</option>
-                    </optgroup>
-                    <optgroup label="☕ Кафе, Кофейни и Кальянные">
-                        <option value="Coffee Luks / Пенка">Пенка (Кофейня)</option>
-                        <option value="DarcDay">DarcDay</option>
-                        <option value="Топчик / Лаунж">Местная кальянная / Лаунж</option>
-                        <option value="Subzero / Суши">Суши-бар / Азия</option>
-                    </optgroup>
-                    <optgroup label="🛍 ТРК, Кино и Развлечения">
-                        <option value="ТРК «Родник» (Кино/Рестораны)">ТРК «Родник»</option>
-                        <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
-                        <option value="ТРК «Мегаполис» (Набережная)">ТРК «Мегаполис» (Набережная)</option>
-                        <option value="ТРК «Куба»">ТРК «Куба»</option>
-                        <option value="ТРК «Горки»">ТРК «Горки»</option>
-                    </optgroup>
-                    <optgroup label="🌳 Парки, Прогулки и Природа">
-                        <option value="Пешеходная Кировка">Пешеходная Кировка (Улица)</option>
-                        <option value="Набережная реки Миасс">Набережная реки Миасс</option>
-                        <option value="Парк им. Гагарина">Парк им. Гагарина</option>
-                        <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
-                        <option value="Экопарк (Северо-Запад)">Парк «Экопарк»</option>
-                        <option value="Шершни / Городской пляж">Побережье Шершней</option>
-                    </optgroup>
-                    <optgroup label="✨ Активный отдых и Термы">
-                        <option value="Термы «Voda»">Термы «Voda» (Бассейн/Отдых)</option>
-                        <option value="Ледовый каток / Арена">Каток / Ледовая арена</option>
-                        <option value="Квест-рум в центре">Квест-рум</option>
-                    </optgroup>
+                    <!-- Заполняется динамически в зависимости от возраста -->
                 </select>
             </div>
 
-            <!-- Дата (динамический выбор текущего месяца) -->
+            <!-- Дата -->
             <div>
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
                 <select id="date-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
                     <!-- Заполняется JS -->
                 </select>
             </div>
+
             <!-- Время -->
             <div>
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
@@ -147,7 +118,7 @@
                 </select>
             </div>
 
-            <!-- Кнопка финального подтверждения -->
+            <!-- Кнопка подтверждения -->
             <div class="pt-2">
                 <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base">
                     Подтвердить свидание 💕
@@ -155,7 +126,7 @@
             </div>
         </div>
 
-        <!-- Экран успешного подтверждения (скрыт по умолчанию) -->
+        <!-- Экран успеха -->
         <div id="success-card" class="glass rounded-3xl p-8 text-center hidden space-y-4">
             <div class="text-6xl animate-bounce">💖</div>
             <h2 class="text-xl font-bold text-pink-300">Идеально, договорились!</h2>
@@ -175,8 +146,62 @@
     <footer class="text-center text-[10px] text-slate-500 py-2 tracking-widest uppercase">
         Personal Date Engine • Chelyabinsk Edition
     </footer>
-
     <script>
+        // Базы мест Челябинска
+        const places18Plus = 
+            <optgroup label="🔥 Бары, Пабы и Легенды">
+                <option value="Бар «Доска»">Бар «Доска» (Главный движ)</option>
+                <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
+                <option value="Gipsy Club">Gipsy Club</option>
+                <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
+                <option value="The Бочка">The Бочка</option>
+                <option value="Malina Bar">Malina Bar</option>
+                <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
+                <option value="Garage Underground">Garage Underground</option>
+            </optgroup>
+            <optgroup label="💨 Кальянные и Лаунж">
+                <option value="Мята Lounge">Мята Lounge</option>
+                <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
+                <option value="Облако 53">Облако 53</option>
+                <option value="DarcDay">DarcDay</option>
+            </optgroup>
+            <optgroup label="🍽 Рестораны">
+                <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
+                <option value="Barbaresco">Barbaresco</option>
+                <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
+                <option value="Brüdershaft">Brüdershaft</option>
+            </optgroup>
+            <optgroup label="🌳 Прогулки и Ночной город">
+                <option value="Пешеходная Кировка">Пешеходная Кировка (Ночные бары)</option>
+                <option value="Набережная Миасс">Набережная реки Миасс</option>
+            </optgroup>
+        ;
+
+        const placesUnder18 = 
+            <optgroup label="☕ Уютные кофейни и Кафе">
+                <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
+                <option value="Coffee Luks">Coffee Luks</option>
+                <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
+                <option value="Суши-бар / Азия">Суши-бар / Азия</option>
+            </optgroup>
+            <optgroup label="🛍 ТРК и Развлечения">
+                <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
+                <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
+                <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
+                <option value="ТРК «Куба»">ТРК «Куба»</option>
+            </optgroup>
+            <optgroup label="🌳 Парки и Природа">
+                <option value="Парк им. Гагарина">Парк им. Гагарина</option>
+                <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
+                <option value="Экопарк">Экопарк (Северо-Запад)</option>
+                <option value="Пешеходная Кировка">Кировка (Прогулка)</option>
+            </optgroup>
+            <optgroup label="✨ Отдых и Термы">
+                <option value="Термы «Voda»">Термы «Voda»</option>
+                <option value="Ледовый каток">Ледовый каток</option>
+            </optgroup>
+        ;
+
         // Заполнение дат текущего месяца
         const dateSelect = document.getElementById('date-select');
         const now = new Date();
@@ -195,8 +220,7 @@
             }
             dateSelect.appendChild(option);
         }
-
-        // Логика кнопки "Нет" (угораем: текст меняется, потом кнопка исчезает)
+        // Логика кнопки "Нет" (угораем)
         let noClicks = 0;
         const noMessages = [
             "Кнопка сломалась, жми верхнюю 😉",
@@ -215,19 +239,36 @@
                 btnNo.style.display = 'none';
             }
         }
-        // Переход к выбору мест и дат по нажатию "Да"
-        function goToBooking() {
+
+        // Шаг 1 -> Шаг 2 (Переход к проверке возраста)
+        function goToAgeCheck() {
             document.getElementById('step-question').classList.add('hidden');
-            document.getElementById('step-booking').classList.remove('hidden');
+            document.getElementById('step-age').classList.remove('hidden');
         }
 
-        // Финальное подтверждение свидания
+        // Выбор возраста -> Шаг 3 (Загрузка мест в зависимости от возраста)
+        function selectAge(isAdult) {
+            document.getElementById('step-age').classList.add('hidden');
+            document.getElementById('step-booking').classList.remove('hidden');
+
+            const placeSelect = document.getElementById('place-select');
+            const formatText = document.getElementById('welcome-format-text');
+
+            if (isAdult) {
+                placeSelect.innerHTML = places18Plus;
+                formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
+            } else {
+                placeSelect.innerHTML = placesUnder18;
+                formatText.innerText = "✨ Уютный формат и романтика";
+            }
+        }
+
+        // Финальное подтверждение
         function acceptDate() {
             const place = document.getElementById('place-select').value;
             const date = document.getElementById('date-select').value;
             const time = document.getElementById('time-select').value;
 
-            // Салют из конфетти
             confetti({
                 particleCount: 120,
                 spread: 80,
@@ -235,7 +276,6 @@
                 colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
             });
 
-            // Переключаем блоки
             document.getElementById('step-booking').classList.add('hidden');
             const successCard = document.getElementById('success-card');
             successCard.classList.remove('hidden');
