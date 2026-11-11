@@ -3,152 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Personal Date Manager</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Private Invitation ✨</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti для праздничного салюта при согласии -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            background: linear-gradient(135deg, #090d16 0%, #1a103c 50%, #2b0c3f 100%);
             color: #f8fafc;
             font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
         }
         .glass {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         select option {
-            background: #1e1b4b;
+            background: #1a103c;
             color: #f8fafc;
         }
-        button {
-            cursor: pointer;
-            user-select: none;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
+        }
+        .bunny-anim {
+            animation: float 3s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto">
+<body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto relative select-none">
 
-    <!-- Шапка: Имя мадам -->
-    <div class="glass rounded-3xl p-5 text-center shadow-2xl mt-2">
-        <div class="w-20 h-20 rounded-full mx-auto border-2 border-pink-500/50 bg-gradient-to-tr from-pink-600 to-rose-400 flex items-center justify-center text-3xl mb-2 shadow-lg" id="girl-avatar">
-            💖
+    <!-- Фоновые неоновые свечения -->
+    <div class="absolute top-10 left-5 w-32 h-32 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 right-5 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Основной контейнер -->
+    <div class="relative z-10 my-auto space-y-4">
+        
+        <!-- Шапка с зайчиком и романтикой -->
+        <div class="glass rounded-3xl p-6 text-center shadow-2xl">
+            <div class="text-5xl mb-3 bunny-anim inline-block filter drop-shadow-[0_0_15px_rgba(244,114,182,0.6)]">
+                🐰🤍
+            </div>
+            <h1 class="text-2xl font-black bg-gradient-to-r from-pink-400 via-rose-300 to-purple-400 bg-clip-text text-transparent">
+                Особенное приглашение
+            </h1>
+            <p class="text-xs text-slate-300 mt-1 font-medium tracking-wide">
+                Только для той самой самурайши ✨
+            </p>
         </div>
-        <h1 class="text-xl font-bold bg-gradient-to-r from-pink-400 to-rose-300 bg-clip-text text-transparent">
-            Привет, <span id="girl-name">Красотка</span> ✨
-        </h1>
-        <p class="text-xs text-slate-400 mt-1">Выбери место и время для нашей встречи</p>
+
+        <!-- Блок выбора деталей свидания -->
+        <div id="booking-card" class="glass rounded-3xl p-5 space-y-4">
+            
+            <!-- Локация (Челябинск) -->
+            <div>
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Атмосфера и место:</label>
+                <select id="place-select" class="w-full bg-slate-900/80 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                    <optgroup label="🍸 Ночной движ & Бары">
+                        <option value="Gipsy Club">Gipsy Club (Танцы и вайб)</option>
+                        <option value="Meet Point (Кировка)">Meet Point на Кировке</option>
+                        <option value="The Бочка">The Бочка</option>
+                        <option value="Malina Bar">Malina Bar</option>
+                    </optgroup>
+                    <optgroup label="🍽 Уютные места">
+                        <option value="Ресторан «Облака»">Ресторан «Облака» (Вид на город)</option>
+                        <option value="Barbaresco">Barbaresco</option>
+                        <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
+                    </optgroup>
+                    <optgroup label="✨ Прогулка и ТРК">
+                        <option value="ТРК «Родник»">ТРК «Родник» (Кино / Кофе)</option>
+                        <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
+                        <option value="Пешеходная Кировка">Кировка (Ночные фонари)</option>
+                        <option value="Парк им. Гагарина">Парк им. Гагарина (Уединение)</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Дата -->
+            <div>
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Когда идем:</label>
+                <select id="date-select" class="w-full bg-slate-900/80 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                    <!-- Заполняется JS -->
+                </select>
+            </div>
+
+            <!-- Время -->
+            <div>
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Во сколько:</label>
+                <select id="time-select" class="w-full bg-slate-900/80 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                    <option value="18:00">18:00 — Вечерний кофе / Закат</option>
+                    <option value="19:30">19:30 — Праздный ужин / Продленка</option>
+                    <option value="21:00">21:00 — Ночной движ / Клуб</option>
+                    <option value="23:00">23:00 — Полночный вайб</option>
+                </select>
+            </div>
+
+            <!-- Кнопки управления (Отказ не предусмотрен) -->
+            <div class="pt-2 space-y-2">
+                <button type="button" id="btn-accept" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base">
+                    Согласна на свидание 💕
+                </button>
+                
+                <!-- Кнопка «Отказаться» — интерактивный прикол: при попытке нажать текст меняется или кнопка исчезает -->
+                <button type="button" id="btn-refuse" onclick="handleRefusal()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-2.5 rounded-xl text-xs font-medium border border-slate-700/50 transition">
+                    Сомневаюсь / Не хочу
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран успешного подтверждения (скрыт по умолчанию) -->
+        <div id="success-card" class="glass rounded-3xl p-8 text-center hidden space-y-4">
+            <div class="text-6xl animate-bounce">💖</div>
+            <h2 class="text-xl font-bold text-pink-300">Договорились!</h2>
+            <p id="success-text" class="text-sm text-slate-300 leading-relaxed">
+                Твой выбор зафиксирован в системе. Готовься, будет жарко 🔥
+            </p>
+            <div class="pt-2">
+                <span class="inline-block bg-pink-500/20 text-pink-300 text-xs px-4 py-2 rounded-full border border-pink-500/30 font-medium">
+                    Скриншоть экран и скидывай мне 🥂
+                </span>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Шаг 1: Проверка возраста -->
-    <div id="step-age" class="glass rounded-2xl p-5 my-auto space-y-4">
-        <h2 class="text-sm font-semibold text-pink-300 text-center">Подтверди свой возраст:</h2>
-        <div class="grid grid-cols-3 gap-3">
-            <button type="button" onclick="handleAge(16)" class="bg-slate-800/90 hover:bg-slate-700 py-3 rounded-xl border border-slate-700 active:scale-95 transition text-sm font-medium">16-17</button>
-            <button type="button" onclick="handleAge(18)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3 rounded-xl font-medium active:scale-95 transition text-sm shadow-md">18-21</button>
-            <button type="button" onclick="handleAge(22)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3 rounded-xl font-medium active:scale-95 transition text-sm shadow-md">22+</button>
-        </div>
-    </div>
-
-    <!-- Шаг 2: Выбор места, даты и времени -->
-    <div id="step-booking" class="glass rounded-2xl p-4 my-auto hidden space-y-3">
-        <div>
-            <label class="block text-xs font-medium text-pink-300 mb-1">📍 Локация (Челябинск):</label>
-            <select id="place-select" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
-                <optgroup label="🍸 Клубы и Бары">
-                    <option value="Gipsy Club Chelyabinsk">Gipsy Club</option>
-                    <option value="Meet Point (на Кировке)">Meet Point</option>
-                    <option value="The Бочка">The Бочка</option>
-                    <option value="Malina Bar">Malina Bar</option>
-                </optgroup>
-                <optgroup label="🍽 Рестораны">
-                    <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака»</option>
-                    <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
-                    <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
-                    <option value="Barbaresco">Barbaresco</option>
-                </optgroup>
-                <optgroup label="🛍 ТРК и Развлечения">
-                    <option value="ТРК «Мегаполис»">Мегаполис (Кино / Набережная)</option>
-                    <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
-                    <option value="ТРК «Родник»">ТРК «Родник»</option>
-                    <option value="Кировка (Пешеходная зона)">Кировка (Пешеходная зона)</option>
-                </optgroup>
-                <optgroup label="🌳 Парки">
-                    <option value="Парк им. Гагарина">Парк им. Гагарина</option>
-                    <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
-                    <option value="Набережная реки Миасс">Набережная Миасс</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <div>
-            <label class="block text-xs font-medium text-pink-300 mb-1">📅 Дата:</label>
-            <select id="date-select" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
-            </select>
-        </div>
-
-        <div>
-            <label class="block text-xs font-medium text-pink-300 mb-1">⏰ Время:</label>
-            <select id="time-select" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-3 text-sm focus:border-pink-500 outline-none">
-                <option value="00:00">00:00 (Ночной движ)</option>
-                <option value="01:00">01:00</option>
-                <option value="02:00">02:00</option>
-                <option value="12:00">12:00 (День)</option>
-                <option value="14:00">14:00 (Обед / Кофе)</option>
-                <option value="16:00">16:00 (Полдник)</option>
-                <option value="18:00">18:00 (Вечер)</option>
-                <option value="19:00">19:00 (Прайм-тайм)</option>
-                <option value="20:00">20:00 (Кафе / Прогулка)</option>
-                <option value="21:00">21:00 (Ночь / Клуб)</option>
-                <option value="22:00">22:00</option>
-                <option value="23:00">23:00</option>
-            </select>
-        </div>
-
-        <button type="button" onclick="submitBooking()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 py-3.5 rounded-xl font-bold text-white shadow-lg active:scale-95 transition mt-2">
-            Отправить на согласование ✨
-        </button>
-    </div>
-
-    <!-- Шаг 3: Отказ (младше 18) -->
-    <div id="step-denied" class="glass rounded-2xl p-6 text-center my-auto hidden">
-        <div class="text-4xl mb-2">🛑</div>
-        <h3 class="text-lg font-bold text-rose-400">Упс, не получится!</h3>
-        <p class="text-sm text-slate-300 mt-2">Я хожу на свидания только с девушками 18+. Расти скорее 😉</p>
-    </div>
+    <!-- Подвал -->
+    <footer class="text-center text-[10px] text-slate-500 py-2 tracking-widest uppercase">
+        Personal Date Engine • Chelyabinsk Edition
+    </footer>
 
     <script>
-        let tg = null;
-        if (window.Telegram && window.Telegram.WebApp) {
-            tg = window.Telegram.WebApp;
-            try { tg.expand(); } catch(e) {}
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const girlName = urlParams.get('name');
-        const girlPhoto = urlParams.get('photo');
-
-        if (girlName) {
-            const decodedName = decodeURIComponent(girlName);
-            document.getElementById('girl-name').innerText = decodedName;
-            // Ставим первую букву имени в аватарку или красивую иконку
-            document.getElementById('girl-avatar').innerHTML = decodedName.charAt(0).toUpperCase();
-        }
-
-        // Если прилетела прямая картинка (не Telegram API), пробуем её подставить
-        if (girlPhoto && !girlPhoto.includes('api.telegram.org')) {
-            const decodedPhoto = decodeURIComponent(girlPhoto);
-            document.getElementById('girl-avatar').outerHTML = <img src="${decodedPhoto}" alt="Photo" class="w-20 h-20 rounded-full mx-auto border-2 border-pink-500/50 object-cover mb-2 shadow-lg" id="girl-avatar">;
-        }
-        // Авто-заполнение дат текущего месяца
+        // Заполнение дат текущего месяца
         const dateSelect = document.getElementById('date-select');
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
         const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-
         for (let day = 1; day <= daysInMonth; day++) {
             let option = document.createElement('option');
             let formattedDay = day < 10 ? '0' + day : day;
@@ -160,32 +156,52 @@
             dateSelect.appendChild(option);
         }
 
-        function handleAge(age) {
-            document.getElementById('step-age').classList.add('hidden');
-            if (age < 18) {
-                document.getElementById('step-denied').classList.remove('hidden');
+        // Счетчик попыток нажать на «Отказаться» (угораем)
+        let refusalClicks = 0;
+        const refusalMessages = [
+            "Кнопка не работает, увы 😉",
+            "Сюда нельзя нажимать, выбирай первое!",
+            "Отказы не принимаются системой 🛑",
+            "Ну всё, ты обречена на свидание 💖",
+            "Хватит ломаматься, жми розовую кнопку!"
+        ];
+
+        function handleRefusal() {
+            const refusalBtn = document.getElementById('btn-refuse');
+            if (refusalClicks < refusalMessages.length) {
+                refusalBtn.innerText = refusalMessages[refusalClicks];
+                refusalClicks++;
+                // Слегка уменьшаем кнопку отказа с каждым кликом
+                refusalBtn.style.transform = scale(${1 - refusalClicks * 0.08});
             } else {
-                document.getElementById('step-booking').classList.remove('hidden');
+                // На 6-й раз кнопка окончательно пропадает
+                refusalBtn.style.display = 'none';
             }
         }
 
-        function submitBooking() {
+        // Кнопка согласия
+        function acceptDate() {
             const place = document.getElementById('place-select').value;
             const date = document.getElementById('date-select').value;
             const time = document.getElementById('time-select').value;
-            const payload = {
-                girl: girlName ? decodeURIComponent(girlName) : "Мадам",
-                place: place,
-                date: date,
-                time: time
-            };
 
-            if (tg && tg.sendData) {
-                tg.sendData(JSON.stringify(payload));
-                tg.close();
-            } else {
-                alert("Данные для бота:\n" + JSON.stringify(payload, null, 2));
-            }
+            // Запускаем праздничный салют из сердечек
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
+            });
+
+            // Прячем карточку выбора, показываем успех с деталями
+            document.getElementById('booking-card').classList.add('hidden');
+            const successCard = document.getElementById('success-card');
+            successCard.classList.remove('hidden');
+
+            document.getElementById('success-text').innerHTML = 
+                Место: <b class="text-pink-300">${place}</b><br> +
+                Дата: <b class="text-pink-300">${date} в ${time}</b><br><br> +
+                Всё зафиксировано. Жду тебя! 🔥;
         }
     </script>
 </body>
