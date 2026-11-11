@@ -42,7 +42,7 @@
     <div class="absolute bottom-10 right-5 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Основной контейнер -->
-    <div class="relative z-10 my-auto space-y-4">
+    <div class="relative z-10 my-auto space-y-4 w-full">
         
         <!-- Шапка с зайчиком -->
         <div class="glass rounded-3xl p-6 text-center shadow-2xl">
@@ -58,41 +58,41 @@
         </div>
 
         <!-- ШАГ 1: Вопрос "Готова пойти со мной на свидание?" -->
-        <div id="step-question" class="glass rounded-3xl p-6 text-center space-y-5">
+        <div id="step-question" class="glass rounded-3xl p-6 text-center space-y-5" style="display: block;">
             <h2 class="text-lg font-bold text-pink-200">Готова пойти со мной на свидание? 🥂</h2>
             <div class="space-y-3">
-                <button type="button" onclick="goToAgeCheck()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base">
+                <button type="button" onclick="goToAgeCheck()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base cursor-pointer">
                     Да, с удовольствием! 💕
                 </button>
-                <button type="button" id="btn-no" onclick="handleNoClick()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-3 rounded-xl text-xs font-medium border border-slate-700/50 transition">
+                <button type="button" id="btn-no" onclick="handleNoClick()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-3 rounded-xl text-xs font-medium border border-slate-700/50 transition cursor-pointer">
                     Нет / Подумаю
                 </button>
             </div>
         </div>
 
         <!-- ШАГ 2: Проверка возраста -->
-        <div id="step-age" class="glass rounded-3xl p-6 text-center space-y-4 hidden">
+        <div id="step-age" class="glass rounded-3xl p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-base font-bold text-pink-200">Подтверди свой возраст 👇</h2>
             <p class="text-xs text-slate-400">Это нужно для подбора правильного формата заведения</p>
             <div class="grid grid-cols-2 gap-3 pt-2">
-                <button type="button" onclick="selectAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition">
+                <button type="button" onclick="selectAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition cursor-pointer">
                     Младше 18 🍷
                 </button>
-                <button type="button" onclick="selectAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition">
+                <button type="button" onclick="selectAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition cursor-pointer">
                     18+ 🔥
                 </button>
             </div>
         </div>
 
         <!-- ШАГ 3: Выбор места, даты и времени -->
-        <div id="step-booking" class="glass rounded-3xl p-5 space-y-4 hidden">
+        <div id="step-booking" class="glass rounded-3xl p-5 space-y-4" style="display: none;">
             <h2 id="welcome-format-text" class="text-xs font-bold text-pink-300 text-center uppercase tracking-wider mb-1"></h2>
 
             <!-- Локация -->
             <div>
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Место встречи (Челябинск):</label>
                 <select id="place-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
-                    <!-- Заполняется динамически в зависимости от возраста -->
+                    <!-- Заполняется динамически -->
                 </select>
             </div>
 
@@ -120,14 +120,14 @@
 
             <!-- Кнопка подтверждения -->
             <div class="pt-2">
-                <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base">
+                <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base cursor-pointer">
                     Подтвердить свидание 💕
                 </button>
             </div>
         </div>
 
         <!-- Экран успеха -->
-        <div id="success-card" class="glass rounded-3xl p-8 text-center hidden space-y-4">
+        <div id="success-card" class="glass rounded-3xl p-8 text-center space-y-4" style="display: none;">
             <div class="text-6xl animate-bounce">💖</div>
             <h2 class="text-xl font-bold text-pink-300">Идеально, договорились!</h2>
             <p id="success-text" class="text-sm text-slate-300 leading-relaxed">
@@ -220,7 +220,7 @@
             }
             dateSelect.appendChild(option);
         }
-        // Логика кнопки "Нет" (угораем)
+        // Логика кнопки "Нет"
         let noClicks = 0;
         const noMessages = [
             "Кнопка сломалась, жми верхнюю 😉",
@@ -240,16 +240,16 @@
             }
         }
 
-        // Шаг 1 -> Шаг 2 (Переход к проверке возраста)
+        // Переход к экрану проверки возраста
         function goToAgeCheck() {
-            document.getElementById('step-question').classList.add('hidden');
-            document.getElementById('step-age').classList.remove('hidden');
+            document.getElementById('step-question').style.display = 'none';
+            document.getElementById('step-age').style.display = 'block';
         }
 
-        // Выбор возраста -> Шаг 3 (Загрузка мест в зависимости от возраста)
+        // Выбор возраста и загрузка нужных мест
         function selectAge(isAdult) {
-            document.getElementById('step-age').classList.add('hidden');
-            document.getElementById('step-booking').classList.remove('hidden');
+            document.getElementById('step-age').style.display = 'none';
+            document.getElementById('step-booking').style.display = 'block';
 
             const placeSelect = document.getElementById('place-select');
             const formatText = document.getElementById('welcome-format-text');
@@ -263,7 +263,7 @@
             }
         }
 
-        // Финальное подтверждение
+        // Финал подтверждения
         function acceptDate() {
             const place = document.getElementById('place-select').value;
             const date = document.getElementById('date-select').value;
@@ -276,9 +276,8 @@
                 colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
             });
 
-            document.getElementById('step-booking').classList.add('hidden');
-            const successCard = document.getElementById('success-card');
-            successCard.classList.remove('hidden');
+            document.getElementById('step-booking').style.display = 'none';
+            document.getElementById('success-card').style.display = 'block';
 
             document.getElementById('success-text').innerHTML = 
                 📍 Место: <b class="text-pink-300">${place}</b><br> +
