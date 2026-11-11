@@ -10,131 +10,159 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #090d16 0%, #1a103c 50%, #2b0c3f 100%);
+            /* Более нежный и романтичный градиент */
+            background: linear-gradient(135deg, #1f0b36 0%, #3a154d 50%, #661a4d 100%);
             color: #f8fafc;
             font-family: system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
         }
         .glass {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,192,203, 0.1);
         }
+        /* Стилизация скролла в выпадающих списках для красоты */
         select option {
-            background: #1a103c;
+            background: #2a103c;
             color: #f8fafc;
         }
+        .input-style {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+        .input-style:focus {
+            border-color: #f472b6;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
+            outline: none;
+        }
+        /* Анимации */
         @keyframes float {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-8px) scale(1.05); }
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+            50% { transform: translateY(-10px) scale(1.05) rotate(5deg); }
         }
         .bunny-anim {
-            animation: float 3s ease-in-out infinite;
+            animation: float 3.5s ease-in-out infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        .falling-item {
+            position: fixed;
+            top: -10vh;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 0;
+            animation: fall linear infinite;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto relative select-none">
 
+    <!-- Фоновые падающие элементы (сердечки и цветочки) -->
+    <div id="falling-container"></div>
+    
     <!-- Фоновые неоновые свечения -->
-    <div class="absolute top-10 left-5 w-32 h-32 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-10 right-5 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-10 left-5 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 right-5 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Основной контейнер -->
-    <div class="relative z-10 my-auto space-y-4 w-full">
+    <div class="relative z-10 my-auto space-y-5 w-full">
         
         <!-- Шапка с зайчиком -->
-        <div class="glass rounded-3xl p-6 text-center shadow-2xl">
-            <div class="text-5xl mb-3 bunny-anim inline-block filter drop-shadow-[0_0_15px_rgba(244,114,182,0.6)]">
-                🐰🤍
+        <div class="glass rounded-[2.5rem] p-6 text-center shadow-2xl relative overflow-hidden">
+            <div class="text-6xl mb-2 bunny-anim inline-block filter drop-shadow-[0_0_20px_rgba(244,114,182,0.8)]">
+                🐰💖
             </div>
-            <h1 class="text-2xl font-black bg-gradient-to-r from-pink-400 via-rose-300 to-purple-400 bg-clip-text text-transparent">
+            <h1 class="text-3xl font-black bg-gradient-to-r from-pink-300 via-rose-400 to-purple-400 bg-clip-text text-transparent drop-shadow-sm">
                 Особенное приглашение
             </h1>
-            <p class="text-xs text-slate-300 mt-1 font-medium tracking-wide">
+            <p class="text-xs text-pink-200/80 mt-2 font-medium tracking-widest uppercase">
                 Только для тебя ✨
             </p>
         </div>
 
         <!-- ШАГ 1: Вопрос "Готова пойти со мной на свидание?" -->
-        <div id="step-question" class="glass rounded-3xl p-6 text-center space-y-5" style="display: block;">
-            <h2 class="text-lg font-bold text-pink-200">Готова пойти со мной на свидание? 🥂</h2>
-            <div class="space-y-3">
-                <button type="button" onclick="goToAgeCheck()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base cursor-pointer">
+        <div id="step-question" class="glass rounded-[2.5rem] p-6 text-center space-y-6" style="display: block;">
+            <h2 class="text-xl font-bold text-pink-100">Готова пойти со мной на свидание? 🥂</h2>
+            <div class="space-y-4 pt-2">
+                <button type="button" onclick="goToAgeCheck()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 py-4 rounded-3xl font-bold text-white shadow-[0_0_30px_rgba(244,114,182,0.5)] active:scale-95 transition-all duration-300 text-lg cursor-pointer">
                     Да, с удовольствием! 💕
                 </button>
-                <button type="button" id="btn-no" onclick="handleNoClick()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-3 rounded-xl text-xs font-medium border border-slate-700/50 transition cursor-pointer">
+                <button type="button" id="btn-no" onclick="handleNoClick()" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-400 py-3 rounded-2xl text-xs font-medium border border-slate-700/50 transition cursor-pointer">
                     Нет / Подумаю
                 </button>
             </div>
         </div>
 
-        <!-- ШАГ 2: Проверка возраста -->
-        <div id="step-age" class="glass rounded-3xl p-6 text-center space-y-4" style="display: none;">
-            <h2 class="text-base font-bold text-pink-200">Подтверди свой возраст 👇</h2>
-            <p class="text-xs text-slate-400">Это нужно для подбора правильного формата заведения</p>
-            <div class="grid grid-cols-2 gap-3 pt-2">
-                <button type="button" onclick="selectAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition cursor-pointer">
-                    Младше 18 🍷
-                </button>
-                <button type="button" onclick="selectAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition cursor-pointer">
-                    18+ 🔥
+        <!-- ШАГ 2: Ввод возраста -->
+        <div id="step-age" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
+            <h2 class="text-lg font-bold text-pink-200">Сколько тебе лет? 🌸</h2>
+            <p class="text-xs text-slate-300/80">Введи свой возраст, чтобы я подобрал идеальный план</p>
+            
+            <div class="pt-3">
+                <input type="number" id="age-input" min="1" max="99" placeholder="Твой возраст..." class="input-style w-32 py-3 rounded-2xl text-white placeholder-slate-500 mx-auto block">
+            </div>
+            
+            <div class="pt-2">
+                <button type="button" onclick="submitAge()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 py-3.5 rounded-2xl font-bold text-white shadow-lg active:scale-95 transition cursor-pointer">
+                    Продолжить ✨
                 </button>
             </div>
         </div>
 
         <!-- ШАГ 3: Выбор места, даты и времени -->
-        <div id="step-booking" class="glass rounded-3xl p-5 space-y-4" style="display: none;">
-            <h2 id="welcome-format-text" class="text-xs font-bold text-pink-300 text-center uppercase tracking-wider mb-1"></h2>
+        <div id="step-booking" class="glass rounded-[2.5rem] p-5 space-y-5" style="display: none;">
+            <h2 id="welcome-format-text" class="text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2"></h2>
 
             <!-- Локация -->
             <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Место встречи (Челябинск):</label>
-                <select id="place-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">📍 Куда пойдем?</label>
+                <select id="place-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3.5 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
                     <!-- Заполняется динамически -->
                 </select>
             </div>
 
             <!-- Дата -->
             <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
-                <select id="date-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
+                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">📅 Дата:</label>
+                <select id="date-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3.5 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
                     <!-- Заполняется JS -->
                 </select>
             </div>
 
             <!-- Время -->
             <div>
-                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
-                <select id="time-select" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 text-sm focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition">
-                    <option value="12:00">12:00 — Дневной кофе / Прогулка</option>
-                    <option value="14:00">14:00 — Обед / Встреча</option>
-                    <option value="16:00">16:00 — Полдник / Кино</option>
-                    <option value="18:00">18:00 — Вечерний закат / Ужин</option>
-                    <option value="19:30">19:30 — Праздный прайм-тайм</option>
-                    <option value="21:00">21:00 — Ночной движ / Клуб / Бар</option>
-                    <option value="23:00">23:00 — Полночный вайб</option>
+                <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">⏰ Время:</label>
+                <select id="time-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3.5 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white">
+                    <!-- Заполняется JS -->
                 </select>
             </div>
 
             <!-- Кнопка подтверждения -->
-            <div class="pt-2">
-                <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 py-4 rounded-2xl font-bold text-white shadow-[0_0_25px_rgba(244,114,182,0.4)] active:scale-95 transition text-base cursor-pointer">
+            <div class="pt-3">
+                <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 py-4 rounded-3xl font-bold text-white shadow-[0_0_30px_rgba(244,114,182,0.5)] active:scale-95 transition text-base cursor-pointer">
                     Подтвердить свидание 💕
                 </button>
             </div>
         </div>
 
         <!-- Экран успеха -->
-        <div id="success-card" class="glass rounded-3xl p-8 text-center space-y-4" style="display: none;">
-            <div class="text-6xl animate-bounce">💖</div>
-            <h2 class="text-xl font-bold text-pink-300">Идеально, договорились!</h2>
-            <p id="success-text" class="text-sm text-slate-300 leading-relaxed">
+        <div id="success-card" class="glass rounded-[2.5rem] p-8 text-center space-y-4" style="display: none;">
+            <div class="text-7xl animate-bounce filter drop-shadow-[0_0_15px_rgba(244,114,182,0.8)]">💖</div>
+            <h2 class="text-2xl font-bold text-pink-300">Идеально, договорились!</h2>
+            <p id="success-text" class="text-sm text-slate-200 leading-relaxed bg-slate-900/50 p-4 rounded-2xl border border-pink-500/20">
                 Твой выбор зафиксирован. Готовься к крутому вечеру 🔥
             </p>
             <div class="pt-2">
-                <span class="inline-block bg-pink-500/20 text-pink-300 text-xs px-4 py-3 rounded-2xl border border-pink-500/30 font-medium">
+                <span class="inline-block bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-200 text-xs px-5 py-4 rounded-2xl border border-pink-500/30 font-medium">
                     Скриншоть этот экран и скидывай мне в телегу 🥂
                 </span>
             </div>
@@ -143,40 +171,64 @@
     </div>
 
     <!-- Подвал -->
-    <footer class="text-center text-[10px] text-slate-500 py-2 tracking-widest uppercase">
+    <footer class="text-center text-[10px] text-pink-300/50 py-4 tracking-widest uppercase font-medium">
         Personal Date Engine • Chelyabinsk Edition
     </footer>
 
     <!-- СКРИПТ -->
     <script>
         window.onload = function() {
-            // Базы мест Челябинска
+            // --- Генерация падающих сердечек и цветочков ---
+            const fallingContainer = document.getElementById('falling-container');
+            const emojis = ['💖', '🌸', '✨', '💕', '🌺', '💗'];
+            
+            function createFallingItem() {
+                const el = document.createElement('div');
+                el.classList.add('falling-item');
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.animationDuration = (Math.random() * 3 + 4) + 's'; // От 4 до 7 секунд
+                el.style.opacity = Math.random() * 0.6 + 0.4;
+                el.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                
+                fallingContainer.appendChild(el);
+                
+                // Удаляем элемент после завершения анимации, чтобы не засорять DOM
+                setTimeout(() => {
+                    el.remove();
+                }, 7000);
+            }
+            
+            // Спавним элементы постоянно
+            setInterval(createFallingItem, 300);
+
+            // --- Данные локаций ---
             const places18Plus = `
+                <optgroup label="🏎 Экстрим и Тусовки">
+                    <option value="Покатушки на тачке (с подругой для друга)">Покатушки на тачке (с подругой для моего друга) 🏎💨</option>
+                </optgroup>
                 <optgroup label="🔥 Бары, Пабы и Легенды">
                     <option value="Бар «Доска»">Бар «Доска» (Главный движ)</option>
                     <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
-                    <option value="Gipsy Club">Gipsy Club</option>
                     <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
                     <option value="The Бочка">The Бочка</option>
                     <option value="Malina Bar">Malina Bar</option>
-                    <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
-                    <option value="Garage Underground">Garage Underground</option>
                 </optgroup>
                 <optgroup label="💨 Кальянные и Лаунж">
                     <option value="Мята Lounge">Мята Lounge</option>
                     <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
                     <option value="Облако 53">Облако 53</option>
-                    <option value="DarcDay">DarcDay</option>
                 </optgroup>
                 <optgroup label="🍽 Рестораны">
                     <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
                     <option value="Barbaresco">Barbaresco</option>
-                    <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
                     <option value="Brüdershaft">Brüdershaft</option>
                 </optgroup>
+                <optgroup label="🏠 Уютные места">
+                    <option value="У меня дома">Посиделки у меня дома 🏠 (все дела)</option>
+                </optgroup>
                 <optgroup label="🌳 Прогулки и Ночной город">
-                    <option value="Пешеходная Кировка">Пешеходная Кировка (Ночные бары)</option>
-                    <option value="Набережная Миасс">Набережная реки Миасс</option>
+                    <option value="Набережная Миасс">Набережная реки Миасс (Ночью)</option>
                 </optgroup>
             `;
 
@@ -185,24 +237,38 @@
                     <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
                     <option value="Coffee Luks">Coffee Luks</option>
                     <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
-                    <option value="Суши-бар / Азия">Суши-бар / Азия</option>
                 </optgroup>
                 <optgroup label="🛍 ТРК и Развлечения">
                     <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
-                    <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
                     <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
-                    <option value="ТРК «Куба»">ТРК «Куба»</option>
                 </optgroup>
                 <optgroup label="🌳 Парки и Природа">
-                    <option value="Парк им. Гагарина">Парк им. Гагарина</option>
+                    <option value="Парк им. Гагарина">Парк им. Гагарина (Прогулка)</option>
                     <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
-                    <option value="Экопарк">Экопарк (Северо-Запад)</option>
-                    <option value="Пешеходная Кировка">Кировка (Прогулка)</option>
                 </optgroup>
-                <optgroup label="✨ Отдых и Термы">
-                    <option value="Термы «Voda»">Термы «Voda»</option>
+                <optgroup label="🏠 Уютные места">
+                    <option value="У меня дома">Посиделки у меня дома 🏠 (чай, кино)</option>
+                </optgroup>
+                <optgroup label="✨ Отдых">
                     <option value="Ледовый каток">Ледовый каток</option>
                 </optgroup>
+            `;
+
+            // Переменные для времени
+            const timeSelect = document.getElementById('time-select');
+            const timeOptions18 = `
+                <option value="16:00">16:00 — Дневная движуха</option>
+                <option value="18:00">18:00 — Вечерний закат / Ужин</option>
+                <option value="19:30">19:30 — Прайм-тайм</option>
+                <option value="21:00">21:00 — Ночной движ / Клуб / Бар</option>
+                <option value="23:00">23:00 — Полночный вайб</option>
+            `;
+            const timeOptionsUnder18 = `
+                <option value="12:00">12:00 — Дневной кофе / Прогулка</option>
+                <option value="14:00">14:00 — Обед / Встреча</option>
+                <option value="16:00">16:00 — Полдник / Кино</option>
+                <option value="18:00">18:00 — Вечерняя прогулка</option>
+                <option value="19:00">19:00 — Уютный вечер дома</option>
             `;
 
             // Заполнение дат текущего месяца
@@ -224,7 +290,7 @@
                 dateSelect.appendChild(option);
             }
 
-            // Логика кнопки "Нет"
+            // --- Логика кнопки "Нет" ---
             let noClicks = 0;
             const noMessages = [
                 "Кнопка сломалась, жми верхнюю 😉",
@@ -244,48 +310,80 @@
                 }
             };
 
-            // Переход к экрану проверки возраста
+            // --- Переходы ---
             window.goToAgeCheck = function() {
                 document.getElementById('step-question').style.display = 'none';
                 document.getElementById('step-age').style.display = 'block';
+                // Фокусируемся на инпуте для удобства
+                setTimeout(() => document.getElementById('age-input').focus(), 100);
             };
 
-            // Выбор возраста и загрузка нужных мест
-            window.selectAge = function(isAdult) {
+            window.submitAge = function() {
+                const age = parseInt(document.getElementById('age-input').value);
+                
+                if (isNaN(age) || age < 1 || age > 99) {
+                    alert("Пожалуйста, введи корректный возраст 😊");
+                    return;
+                }
+
                 document.getElementById('step-age').style.display = 'none';
                 document.getElementById('step-booking').style.display = 'block';
 
                 const placeSelect = document.getElementById('place-select');
                 const formatText = document.getElementById('welcome-format-text');
 
-                if (isAdult) {
+                if (age >= 18) {
                     placeSelect.innerHTML = places18Plus;
+                    timeSelect.innerHTML = timeOptions18;
                     formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
+                    formatText.className = "text-sm font-bold text-rose-400 text-center uppercase tracking-wider mb-2 drop-shadow-[0_0_10px_rgba(244,114,182,0.5)]";
                 } else {
                     placeSelect.innerHTML = placesUnder18;
+                    timeSelect.innerHTML = timeOptionsUnder18;
                     formatText.innerText = "✨ Уютный формат и романтика";
+                    formatText.className = "text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2";
                 }
             };
 
-            // Финал подтверждения
+            // --- Финал ---
             window.acceptDate = function() {
                 const place = document.getElementById('place-select').value;
                 const date = document.getElementById('date-select').value;
                 const time = document.getElementById('time-select').value;
 
-                confetti({
-                    particleCount: 120,
-                    spread: 80,
-                    origin: { y: 0.6 },
-                    colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
-                });
+                // Большой красивый салют из сердечек
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff', '#fda4af'] };
+
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
 
                 document.getElementById('step-booking').style.display = 'none';
                 document.getElementById('success-card').style.display = 'block';
 
+                // Если выбрали хату или тачку, добавляем милые комментарии
+                let extraComment = "";
+                if (place.includes("дома")) extraComment = "Захвати свое любимое кино, я куплю вкусняшки! 🍿";
+                if (place.includes("тачке")) extraComment = "Скажи подруге собираться, нас ждет незабываемый вечер! 😎";
+
                 document.getElementById('success-text').innerHTML = `
                     📍 Место: <b class="text-pink-300">${place}</b><br>
                     📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br><br>
+                    ${extraComment ? `<span class="text-xs text-pink-200 block mt-2">${extraComment}</span>` : ''}
                     Всё записано. Жду тебя! 🔥`;
             };
         };
