@@ -1,140 +1,143 @@
 <script>
-    // Базы мест Челябинска
-    const places18Plus = `
-        <optgroup label="🔥 Бары, Пабы и Легенды">
-            <option value="Бар «Доска»">Бар «Доска» (Главный движ)</option>
-            <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
-            <option value="Gipsy Club">Gipsy Club</option>
-            <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
-            <option value="The Бочка">The Бочка</option>
-            <option value="Malina Bar">Malina Bar</option>
-            <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
-            <option value="Garage Underground">Garage Underground</option>
-        </optgroup>
-        <optgroup label="💨 Кальянные и Лаунж">
-            <option value="Мята Lounge">Мята Lounge</option>
-            <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
-            <option value="Облако 53">Облако 53</option>
-            <option value="DarcDay">DarcDay</option>
-        </optgroup>
-        <optgroup label="🍽 Рестораны">
-            <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
-            <option value="Barbaresco">Barbaresco</option>
-            <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
-            <option value="Brüdershaft">Brüdershaft</option>
-        </optgroup>
-        <optgroup label="🌳 Прогулки и Ночной город">
-            <option value="Пешеходная Кировка">Пешеходная Кировка (Ночные бары)</option>
-            <option value="Набережная Миасс">Набережная реки Миасс</option>
-        </optgroup>
-    `;
+    // Ждем полной загрузки HTML
+    window.onload = function() {
+        // Базы мест Челябинска
+        const places18Plus = `
+            <optgroup label="🔥 Бары, Пабы и Легенды">
+                <option value="Бар «Доска»">Бар «Доска» (Главный движ)</option>
+                <option value="Roxy Bar">Roxy Bar (Рокси — рок и тусовки)</option>
+                <option value="Gipsy Club">Gipsy Club</option>
+                <option value="Meet Point (на Кировке)">Meet Point (на Кировке)</option>
+                <option value="The Бочка">The Бочка</option>
+                <option value="Malina Bar">Malina Bar</option>
+                <option value="Пьяная Овечка">Пьяная Овечка (Паб)</option>
+                <option value="Garage Underground">Garage Underground</option>
+            </optgroup>
+            <optgroup label="💨 Кальянные и Лаунж">
+                <option value="Мята Lounge">Мята Lounge</option>
+                <option value="Дымный Шаман / Кальянная">Топовая кальянная в центре</option>
+                <option value="Облако 53">Облако 53</option>
+                <option value="DarcDay">DarcDay</option>
+            </optgroup>
+            <optgroup label="🍽 Рестораны">
+                <option value="Ресторан «Облака» (Виденгоф)">Ресторан «Облака» (Панорама)</option>
+                <option value="Barbaresco">Barbaresco</option>
+                <option value="Ресторан «Дсыръ»">Ресторан «Дсыръ»</option>
+                <option value="Brüdershaft">Brüdershaft</option>
+            </optgroup>
+            <optgroup label="🌳 Прогулки и Ночной город">
+                <option value="Пешеходная Кировка">Пешеходная Кировка (Ночные бары)</option>
+                <option value="Набережная Миасс">Набережная реки Миасс</option>
+            </optgroup>
+        `;
 
-    const placesUnder18 = `
-        <optgroup label="☕ Уютные кофейни и Кафе">
-            <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
-            <option value="Coffee Luks">Coffee Luks</option>
-            <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
-            <option value="Суши-бар / Азия">Суши-бар / Азия</option>
-        </optgroup>
-        <optgroup label="🛍 ТРК и Развлечения">
-            <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
-            <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
-            <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
-            <option value="ТРК «Куба»">ТРК «Куба»</option>
-        </optgroup>
-        <optgroup label="🌳 Парки и Природа">
-            <option value="Парк им. Гагарина">Парк им. Гагарина</option>
-            <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
-            <option value="Экопарк">Экопарк (Северо-Запад)</option>
-            <option value="Пешеходная Кировка">Кировка (Прогулка)</option>
-        </optgroup>
-        <optgroup label="✨ Отдых и Термы">
-            <option value="Термы «Voda»">Термы «Voda»</option>
-            <option value="Ледовый каток">Ледовый каток</option>
-        </optgroup>
-    `;
+        const placesUnder18 = `
+            <optgroup label="☕ Уютные кофейни и Кафе">
+                <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
+                <option value="Coffee Luks">Coffee Luks</option>
+                <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
+                <option value="Суши-бар / Азия">Суши-бар / Азия</option>
+            </optgroup>
+            <optgroup label="🛍 ТРК и Развлечения">
+                <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
+                <option value="ТРК «Алмаз»">ТРК «Алмаз»</option>
+                <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
+                <option value="ТРК «Куба»">ТРК «Куба»</option>
+            </optgroup>
+            <optgroup label="🌳 Парки и Природа">
+                <option value="Парк им. Гагарина">Парк им. Гагарина</option>
+                <option value="Горсад им. Пушкина">Горсад им. Пушкина</option>
+                <option value="Экопарк">Экопарк (Северо-Запад)</option>
+                <option value="Пешеходная Кировка">Кировка (Прогулка)</option>
+            </optgroup>
+            <optgroup label="✨ Отдых и Термы">
+                <option value="Термы «Voda»">Термы «Voda»</option>
+                <option value="Ледовый каток">Ледовый каток</option>
+            </optgroup>
+        `;
 
-    // Заполнение дат текущего месяца
-    const dateSelect = document.getElementById('date-select');
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+        // Заполнение дат текущего месяца
+        const dateSelect = document.getElementById('date-select');
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    for (let day = 1; day <= daysInMonth; day++) {
-        let option = document.createElement('option');
-        let formattedDay = day < 10 ? '0' + day : day;
-        option.value = `${formattedDay} ${monthsNames[month]}`;
-        option.text = `${day} ${monthsNames[month]}`;
-        if (day === now.getDate()) {
-            option.selected = true;
+        for (let day = 1; day <= daysInMonth; day++) {
+            let option = document.createElement('option');
+            let formattedDay = day < 10 ? '0' + day : day;
+            option.value = `${formattedDay} ${monthsNames[month]}`;
+            option.text = `${day} ${monthsNames[month]}`;
+            if (day === now.getDate()) {
+                option.selected = true;
+            }
+            dateSelect.appendChild(option);
         }
-        dateSelect.appendChild(option);
-    }
 
-    // Логика кнопки "Нет"
-    let noClicks = 0;
-    const noMessages = [
-        "Кнопка сломалась, жми верхнюю 😉",
-        "Сюда нельзя нажимать!",
-        "Система не принимает отказы 🛑",
-        "Ну всё, выбора нет, жми «Да» 💖"
-    ];
+        // Логика кнопки "Нет"
+        let noClicks = 0;
+        const noMessages = [
+            "Кнопка сломалась, жми верхнюю 😉",
+            "Сюда нельзя нажимать!",
+            "Система не принимает отказы 🛑",
+            "Ну всё, выбора нет, жми «Да» 💖"
+        ];
 
-    function handleNoClick() {
-        const btnNo = document.getElementById('btn-no');
-        if (noClicks < noMessages.length) {
-            btnNo.innerText = noMessages[noClicks];
-            noClicks++;
-            btnNo.style.transform = `scale(${1 - noClicks * 0.08})`;
-        } else {
-            btnNo.style.display = 'none';
-        }
-    }
+        window.handleNoClick = function() {
+            const btnNo = document.getElementById('btn-no');
+            if (noClicks < noMessages.length) {
+                btnNo.innerText = noMessages[noClicks];
+                noClicks++;
+                btnNo.style.transform = `scale(${1 - noClicks * 0.08})`;
+            } else {
+                btnNo.style.display = 'none';
+            }
+        };
 
-    // Переход к экрану проверки возраста
-    function goToAgeCheck() {
-        document.getElementById('step-question').style.display = 'none';
-        document.getElementById('step-age').style.display = 'block';
-    }
+        // Переход к экрану проверки возраста
+        window.goToAgeCheck = function() {
+            document.getElementById('step-question').style.display = 'none';
+            document.getElementById('step-age').style.display = 'block';
+        };
 
-    // Выбор возраста и загрузка нужных мест
-    function selectAge(isAdult) {
-        document.getElementById('step-age').style.display = 'none';
-        document.getElementById('step-booking').style.display = 'block';
+        // Выбор возраста и загрузка нужных мест
+        window.selectAge = function(isAdult) {
+            document.getElementById('step-age').style.display = 'none';
+            document.getElementById('step-booking').style.display = 'block';
 
-        const placeSelect = document.getElementById('place-select');
-        const formatText = document.getElementById('welcome-format-text');
+            const placeSelect = document.getElementById('place-select');
+            const formatText = document.getElementById('welcome-format-text');
 
-        if (isAdult) {
-            placeSelect.innerHTML = places18Plus;
-            formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
-        } else {
-            placeSelect.innerHTML = placesUnder18;
-            formatText.innerText = "✨ Уютный формат и романтика";
-        }
-    }
+            if (isAdult) {
+                placeSelect.innerHTML = places18Plus;
+                formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
+            } else {
+                placeSelect.innerHTML = placesUnder18;
+                formatText.innerText = "✨ Уютный формат и романтика";
+            }
+        };
 
-    // Финал подтверждения
-    function acceptDate() {
-        const place = document.getElementById('place-select').value;
-        const date = document.getElementById('date-select').value;
-        const time = document.getElementById('time-select').value;
+        // Финал подтверждения
+        window.acceptDate = function() {
+            const place = document.getElementById('place-select').value;
+            const date = document.getElementById('date-select').value;
+            const time = document.getElementById('time-select').value;
 
-        confetti({
-            particleCount: 120,
-            spread: 80,
-            origin: { y: 0.6 },
-            colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
-        });
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff']
+            });
 
-        document.getElementById('step-booking').style.display = 'none';
-        document.getElementById('success-card').style.display = 'block';
+            document.getElementById('step-booking').style.display = 'none';
+            document.getElementById('success-card').style.display = 'block';
 
-        document.getElementById('success-text').innerHTML = `
-            📍 Место: <b class="text-pink-300">${place}</b><br>
-            📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br><br>
-            Всё записано. Жду тебя! 🔥`;
-    }
+            document.getElementById('success-text').innerHTML = `
+                📍 Место: <b class="text-pink-300">${place}</b><br>
+                📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br><br>
+                Всё записано. Жду тебя! 🔥`;
+        };
+    };
 </script>
