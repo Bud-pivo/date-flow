@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Private Invitation ✨</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -20,18 +22,60 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,192,203, 0.1);
         }
-        select option { background: #2a103c; color: #f8fafc; }
-        .input-style { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(244, 114, 182, 0.3); text-align: center; font-weight: bold; font-size: 1.25rem; letter-spacing: 2px; transition: all 0.3s ease; }
-        .input-style:focus { border-color: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.5); outline: none; }
-        .input-phone { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(244, 114, 182, 0.3); text-align: center; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; transition: all 0.3s ease; color: white; }
-        .input-phone:focus { border-color: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.5); outline: none; }
+        /* Красивые инпуты и селекты */
+        .input-style, .calendar-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(244, 114, 182, 0.4);
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 1rem;
+            outline: none;
+        }
+        .input-style:focus, .calendar-input:focus {
+            border-color: #f472b6;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.6);
+        }
+        /* Стилизация выпадающего списка */
+        select.input-style {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f472b6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        select option, select optgroup {
+            background: #2a103c;
+            color: #f8fafc;
+            padding: 10px;
+        }
+        
         .radio-card input[type="radio"] { display: none; }
-        .radio-card input[type="radio"] + label { display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(244, 114, 182, 0.2); border-radius: 1rem; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; }
-        .radio-card input[type="radio"]:checked + label { background: rgba(244, 114, 182, 0.2); border-color: #f472b6; color: #fbcfe8; box-shadow: 0 0 15px rgba(244, 114, 182, 0.4); transform: scale(1.02); }
+        .radio-card input[type="radio"] + label {
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            padding: 12px; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(244, 114, 182, 0.2);
+            border-radius: 1rem; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-weight: 600; color: #cbd5e1;
+        }
+        .radio-card input[type="radio"]:checked + label {
+            background: rgba(244, 114, 182, 0.2); border-color: #f472b6; color: #fbcfe8;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.4); transform: scale(1.02);
+        }
+        
         @keyframes float { 0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); } 50% { transform: translateY(-10px) scale(1.05) rotate(5deg); } }
         .bunny-anim { animation: float 3.5s ease-in-out infinite; }
+        
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
         .falling-item { position: fixed; top: -10vh; font-size: 1.5rem; pointer-events: none; z-index: 0; animation: fall linear infinite; }
+        
+        /* Анимация появления контента */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto relative select-none">
@@ -42,12 +86,14 @@
 
     <div class="relative z-10 my-auto space-y-5 w-full">
         
+        <!-- Шапка -->
         <div class="glass rounded-[2.5rem] p-6 text-center shadow-2xl relative overflow-hidden">
             <div class="text-6xl mb-2 bunny-anim inline-block filter drop-shadow-[0_0_20px_rgba(244,114,182,0.8)]">🐰💖</div>
             <h1 class="text-3xl font-black bg-gradient-to-r from-pink-300 via-rose-400 to-purple-400 bg-clip-text text-transparent drop-shadow-sm">Особенное приглашение</h1>
             <p class="text-xs text-pink-200/80 mt-2 font-medium tracking-widest uppercase">Только для тебя ✨</p>
         </div>
 
+        <!-- ШАГ 1 -->
         <div id="step-question" class="glass rounded-[2.5rem] p-6 text-center space-y-6" style="display: block;">
             <h2 class="text-xl font-bold text-pink-100">Готова пойти со мной на свидание? 🥂</h2>
             <div class="space-y-4 pt-2">
@@ -56,14 +102,16 @@
             </div>
         </div>
 
+        <!-- ШАГ 2: Возраст -->
         <div id="step-age" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-lg font-bold text-pink-200">Сколько тебе лет? 🌸</h2>
             <p class="text-xs text-slate-300/80">Введи свой возраст, чтобы я подобрал идеальный план</p>
-            <div class="pt-3"><input type="number" id="age-input" min="1" max="99" placeholder="Твой возраст..." class="input-style w-32 py-3 rounded-2xl text-white placeholder-slate-500 mx-auto block"></div>
+            <div class="pt-3"><input type="number" id="age-input" min="1" max="99" placeholder="Твой возраст..." class="input-style w-32 mx-auto block"></div>
             <div id="age-action-block" class="pt-2"><button type="button" onclick="submitAge()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 py-3.5 rounded-2xl font-bold text-white shadow-lg active:scale-95 transition cursor-pointer">Продолжить ✨</button></div>
             <div id="age-error-block" class="pt-2" style="display: none;"><div class="bg-rose-500/20 border border-rose-500/50 p-4 rounded-2xl"><p class="text-sm text-rose-200 font-medium">Ой, извини, но тебе еще рано со мной гулять, ты слишком маленькая для таких приключений 🙈 <br><br><span class="font-bold text-white">Подрасти до 16 лет! 🌸</span></p></div></div>
         </div>
 
+        <!-- ШАГ 2.5: Подтверждение -->
         <div id="step-age-confirm" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-lg font-bold text-pink-200">Точно-точно правильный возраст? 😏</h2>
             <div class="flex justify-center py-2"><img src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="Funny monkey" class="rounded-2xl w-48 h-48 object-cover shadow-[0_0_20px_rgba(244,114,182,0.4)] border border-pink-500/30"></div>
@@ -73,32 +121,64 @@
             </div>
         </div>
 
+        <!-- ШАГ 3: Бронирование -->
         <div id="step-booking" class="glass rounded-[2.5rem] p-5 space-y-4" style="display: none;">
             <h2 id="welcome-format-text" class="text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2"></h2>
+
+            <!-- Место -->
             <div>
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📍 Куда пойдем?</label>
-                <select id="place-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white"></select>
+                <select id="place-select" class="input-style text-left text-sm">
+                </select>
             </div>
+
+            <!-- Дата и Время -->
             <div class="grid grid-cols-2 gap-3">
-                <div><label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label><select id="date-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white"></select></div>
-                <div><label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label><select id="time-select" class="w-full bg-slate-900/80 border border-pink-500/30 rounded-2xl p-3 text-sm focus:border-pink-400 focus:ring-1 focus:ring-pink-400 outline-none transition text-white"></select></div>
+                <div>
+                    <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📅 Дата:</label>
+                    <!-- Используем нативный календарь телефона -->
+                    <input type="date" id="date-input" class="calendar-input">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">⏰ Время:</label>
+                    <!-- Используем нативные часы телефона -->
+                    <input type="time" id="time-input" class="calendar-input">
+                </div>
             </div>
+
+            <!-- Кто платит -->
             <div class="pt-1">
                 <label class="block text-xs font-semibold text-pink-300 mb-2 uppercase tracking-wider">💸 Кто платит?</label>
                 <div class="grid grid-cols-1 gap-2 radio-card">
-                    <div><input type="radio" id="pay-me" name="payment" value="Я угощаю, все дела 😎" checked><label for="pay-me">Я угощаю, все дела 😎</label></div>
-                    <div><input type="radio" id="pay-her" name="payment" value="Она ведет за свой кэш"><label for="pay-her">Ты богатая, ведешь за свой кэш 🤑</label></div>
+                    <div><input type="radio" id="pay-me" name="payment" value="Я угощаю 😎" checked><label for="pay-me">Я угощаю, все дела 😎</label></div>
+                    <div><input type="radio" id="pay-her" name="payment" value="Она платит"><label for="pay-her">Ты богатая, платишь за всё 🤑</label></div>
                     <div><input type="radio" id="pay-split" name="payment" value="Пополам (50/50)"><label for="pay-split">Пополам (50/50) 🤝</label></div>
                 </div>
             </div>
-            <div class="pt-2"><label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📱 Твой номер телефона:</label><input type="tel" id="phone-input" placeholder="+7 (999) 123-45-67" class="input-phone w-full p-3.5 rounded-2xl"></div>
-            <div class="pt-2"><button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 py-4 rounded-3xl font-bold text-white shadow-[0_0_30px_rgba(244,114,182,0.5)] active:scale-95 transition text-base cursor-pointer">Подтвердить свидание 💕</button></div>
+
+            <!-- Телефон -->
+            <div class="pt-2">
+                <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📱 Твой номер телефона:</label>
+                <input type="tel" id="phone-input" placeholder="+7 (999) 123-45-67" class="input-style text-sm">
+            </div>
+
+            <div class="pt-2">
+                <button type="button" onclick="acceptDate()" class="w-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 py-4 rounded-3xl font-bold text-white shadow-[0_0_30px_rgba(244,114,182,0.5)] active:scale-95 transition text-base cursor-pointer">Подтвердить свидание 💕</button>
+            </div>
         </div>
 
+        <!-- Экран успеха -->
         <div id="success-card" class="glass rounded-[2.5rem] p-8 text-center space-y-4" style="display: none;">
             <div class="text-7xl animate-bounce filter drop-shadow-[0_0_15px_rgba(244,114,182,0.8)]">💖</div>
             <h2 class="text-2xl font-bold text-pink-300">Идеально, договорились!</h2>
+            
+            <!-- Сюда будет подставляться угарная гифка -->
+            <div id="success-gif-container" class="my-2" style="display: none;">
+                <img id="success-gif" src="" alt="Funny GIF" class="w-full rounded-2xl object-cover border-2 border-pink-500/50 shadow-lg">
+            </div>
+
             <div id="success-text" class="text-sm text-slate-200 leading-relaxed bg-slate-900/50 p-5 rounded-2xl border border-pink-500/20 text-left"></div>
+            
             <div class="pt-2"><span class="inline-block bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-200 text-xs px-5 py-4 rounded-2xl border border-pink-500/30 font-medium">Скриншоть этот экран и скидывай мне в телегу 🥂</span></div>
         </div>
 
@@ -108,6 +188,7 @@
 
     <script>
         window.onload = function() {
+            // Падающие сердечки
             const fallingContainer = document.getElementById('falling-container');
             const emojis = ['💖', '🌸', '✨', '💕', '🌺', '💗'];
             function createFallingItem() {
@@ -123,100 +204,74 @@
             }
             setInterval(createFallingItem, 300);
 
-            // --- 18+ ---
+            // Настройка нативного календаря (устанавливаем сегодняшнюю дату по умолчанию)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-input').value = today;
+            document.getElementById('time-input').value = "18:00";
+
+            // --- СПИСКИ МЕСТ (Очищенные от [citation] и красиво оформленные) ---
             const places18Plus = `
                 <optgroup label="🏎 Экстрим и Драйв">
-                    <option value="Покатушки на тачке (с подругой для друга)">Покатушки на тачке (с подругой для моего друга) 🏎💨</option>
-                    <option value="Снегоходы">Снегоходы — прокат техники, заснеженный лес, горные перевалы и озера. Инструкторы для новичков ❄️🏔</option>
-                    <option value="Квадроциклы">Квадроциклы — лесные трассы разной сложности (например, экстрим-клуб «Быстрай») 🏍💨</option>
+                    <option value="Покатушки на тачке (с подругой для друга)">Покатушки на тачке 🏎💨</option>
+                    <option value="Снегоходы">Снегоходы в лесу ❄️🏔</option>
+                    <option value="Квадроциклы">Квадроциклы по бездорожью 🏍💨</option>
                 </optgroup>
                 <optgroup label="🔥 Клубы и Бары">
-                    <option value="Doski">Doski — стильный бар с неоном, караоке и танцами</option>
-                    <option value="Gpsy">Gpsy — бар-клуб с DJ, фейс-контролем и музыкой 80-90х</option>
-                    <option value="Roxy Bar">Roxy Bar — танцы на барной стойке и тематические вечеринки</option>
-                    <option value="Meet Point">Meet Point — караоке-бар с go-go и обширной коктейльной картой</option>
-                    <option value="The Бочка">The Бочка — легендарный паб с крафтовым пивом и концертами</option>
+                    <option value="Doski">Doski — неон, караоке и танцы</option>
+                    <option value="Gpsy">Gpsy — DJ и музыка 80-90х</option>
+                    <option value="Roxy Bar">Roxy Bar — танцы на барной стойке</option>
+                    <option value="Meet Point">Meet Point — караоке и коктейли</option>
+                    <option value="The Бочка">The Бочка — крафтовое пиво и рок</option>
                 </optgroup>
                 <optgroup label="💨 Кальянные и Лаунж">
-                    <option value="OverPack Сантай">OverPack Сантай — большой выбор вкусов, настольные игры (шахматы, нарды), отличное соотношение цены и качества</option>
-                    <option value="OverPack Центр">OverPack Центр (пр-т Ленина, 77) — хвалят за атмосферу и большой выбор вкусов кальяна</option>
-                    <option value="Biblioteka lounge">Biblioteka lounge (ул. Свободы, 77 / Витебская, 4) — уютная атмосфера, акцент на качестве кальянов</option>
-                    <option value="Уголь Лаунж">Уголь Лаунж (пр-т Ленина, 64Б) — лаунж-зона с ресторанной подачей (стейки, том-ям), летняя веранда</option>
-                    <option value="Silent Town">Silent Town (ул. Братьев Кашириных, 85Б) — камерный отдых, закрытые комнаты, проектор и игровая приставка</option>
-                    <option value="Goodda Bar">Goodda Bar (ул. Витебская, 4) — кальян + паназиатская кухня (роллы, вок), DJ по выходным, летняя веранда</option>
-                    <option value="HookahPlace">HookahPlace (пр-т Ленина, 64 / Союз) — стабильный сервис, большие диваны, настольные игры</option>
+                    <option value="OverPack Сантай">OverPack Сантай — настолки и вкусы</option>
+                    <option value="OverPack Центр">OverPack Центр — атмосфера и кальян</option>
+                    <option value="Biblioteka lounge">Biblioteka lounge — уютный лаунж</option>
+                    <option value="Уголь Лаунж">Уголь Лаунж — стейки и том-ям</option>
+                    <option value="Silent Town">Silent Town — закрытые комнаты и PS</option>
+                    <option value="Goodda Bar">Goodda Bar — роллы и кальян</option>
+                    <option value="HookahPlace">HookahPlace — большие диваны</option>
                 </optgroup>
-                <optgroup label="🌳 Прогулки и Набережные">
-                    <option value="Набережная реки Миасс">Набережная реки Миасс — обновлённая прогулочная зона с видами на город, колесо обозрения, гастропарк [citation:3][citation:10]</option>
-                    <option value="Сад камней">Сад камней — геологическая экспозиция уральских минералов на набережной, красивая подсветка вечером, сухой фонтан [citation:5][citation:10]</option>
-                    <option value="Парк Гагарина">Парк Гагарина — большой сосновый бор в черте города с карьерами, белками, кино под открытым небом летом [citation:3][citation:10]</option>
-                    <option value="Горсад им. Пушкина">Горсад им. Пушкина — один из старейших парков, аттракционы, танцевальные вечера, ярмарки [citation:10]</option>
-                    <option value="Набережная Первого озера (Чурилово)">Набережная Первого озера (Чурилово) — велодорожки, роллердром, спортивные площадки, пляж [citation:6]</option>
-                    <option value="Кировка">Кировка — пешеходная улица со скульптурами, уличными музыкантами и кафе [citation:3]</option>
-                    <option value="Смотровая на Шершневском водохранилище">Шершневское водохранилище — укромные места у воды для встречи заката и красивых фото [citation:9]</option>
-                    <option value="Национальный парк «Таганай»">Национальный парк «Таганай» — скалы, Каменная река, маршруты для активной пары (выезд за город) [citation:3]</option>
-                    <option value="Национальный парк «Зюраткуль»">Национальный парк «Зюраткуль» — высокогорное озеро и хребет, живописная тропа на вершину [citation:3]</option>
+                <optgroup label="🌳 Прогулки и Набережные (18+)">
+                    <option value="Набережная реки Миасс">Набережная Миасс — колесо обозрения, виды</option>
+                    <option value="Сад камней">Сад камней — подсветка и фонтан</option>
+                    <option value="Парк Гагарина">Парк Гагарина — сосновый бор</option>
+                    <option value="Горсад им. Пушкина">Горсад Пушкина — аттракционы</option>
+                    <option value="Набережная Первого озера">Набережная Чурилово — велодорожки</option>
+                    <option value="Кировка">Кировка — скульптуры и музыканты</option>
+                    <option value="Шершневское водохранилище">Шершни — встречаем закат у воды</option>
+                    <option value="Национальный парк «Таганай»">Таганай — скалы и Каменная река</option>
+                    <option value="Национальный парк «Зюраткуль»">Зюраткуль — высокогорное озеро</option>
                 </optgroup>
                 <optgroup label="🏠 Уютные места">
                     <option value="У меня дома">Посиделки у меня дома 🏠 (все дела)</option>
                 </optgroup>
             `;
 
-            // --- 16+ ---
             const placesUnder18 = `
-                <optgroup label="☕ Уютные кофейни и Кафе">
+                <optgroup label="☕ Кофейни и Кафе">
                     <option value="Кофейня «Пенка»">Кофейня «Пенка»</option>
                     <option value="Coffee Luks">Coffee Luks</option>
                     <option value="Ресторан «Помидор»">Ресторан «Помидор»</option>
                 </optgroup>
                 <optgroup label="🛍 ТРК и Развлечения">
-                    <option value="ТРК «Родник» (Кино)">ТРК «Родник» (Кино / Кофе)</option>
+                    <option value="ТРК «Родник»">ТРК «Родник» (Кино / Кофе)</option>
                     <option value="ТРК «Мегаполис»">ТРК «Мегаполис» (Набережная)</option>
                 </optgroup>
-                <optgroup label="🌳 Прогулки и Парки">
-                    <option value="Набережная реки Миасс">Набережная реки Миасс — гуляем, смотрим на воду, катаемся на катамаране [citation:3][citation:7]</option>
-                    <option value="Сад камней">Сад камней — рассматриваем уральские минералы, фоткаемся у огромных глыб [citation:5]</option>
-                    <option value="Парк Гагарина">Парк Гагарина — кормим белок, гуляем по сосновому бору, летом смотрим кино под открытым небом [citation:10]</option>
-                    <option value="Горсад им. Пушкина">Горсад им. Пушкина — катаемся на аттракционах, едим сладкую вату [citation:10]</option>
-                    <option value="Кировка">Кировка — пешеходная прогулка, ищем скульптуры, заходим в кафе [citation:3]</option>
-                    <option value="Набережная Первого озера (Чурилово)">Набережная Первого озера — велодорожки, качели, пляж (если тепло) [citation:6]</option>
-                    <option value="Пикник в парке">Пикник в парке — плед, вкусняшки, фрукты, хорошая погода (май-сентябрь) [citation:7]</option>
-                    <option value="Смотровая на закат (Шершни)">Шершневское водохранилище — едем встречать закат у воды [citation:9]</option>
+                <optgroup label="🌳 Прогулки и Парки (16+)">
+                    <option value="Набережная реки Миасс">Набережная Миасс — катамараны, виды</option>
+                    <option value="Сад камней">Сад камней — уральские минералы</option>
+                    <option value="Парк Гагарина">Парк Гагарина — белки и кино летом</option>
+                    <option value="Горсад им. Пушкина">Горсад Пушкина — сладкая вата</option>
+                    <option value="Кировка">Кировка — ищем скульптуры</option>
+                    <option value="Набережная Первого озера">Набережная Чурилово — качели и пляж</option>
+                    <option value="Пикник в парке">Пикник в парке — плед и вкусняшки</option>
+                    <option value="Шершневское водохранилище">Шершни — едем на закат</option>
                 </optgroup>
                 <optgroup label="🏠 Уютные места">
                     <option value="У меня дома">Посиделки у меня дома 🏠 (чай, кино)</option>
                 </optgroup>
             `;
-
-            const timeSelect = document.getElementById('time-select');
-            const timeOptions18 = `<option value="16:00">16:00</option><option value="18:00">18:00</option><option value="19:30">19:30</option><option value="21:00">21:00</option><option value="23:00">23:00</option>`;
-            const timeOptionsUnder18 = `<option value="12:00">12:00</option><option value="14:00">14:00</option><option value="16:00">16:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option>`;
-
-            const dateSelect = document.getElementById('date-select');
-            const now = new Date();
-            const monthsNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-            const daysOfWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-            dateSelect.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                let targetMonth = now.getMonth() + i;
-                let targetYear = now.getFullYear();
-                if (targetMonth > 11) { targetMonth -= 12; targetYear += 1; }
-                let optgroup = document.createElement('optgroup');
-                optgroup.label = `${monthsNames[targetMonth]} ${targetYear}`;
-                const daysInMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
-                for (let day = 1; day <= daysInMonth; day++) {
-                    if (i === 0 && day < now.getDate()) continue;
-                    let option = document.createElement('option');
-                    let dateObj = new Date(targetYear, targetMonth, day);
-                    let dayOfWeek = daysOfWeek[dateObj.getDay()];
-                    let formattedDay = day < 10 ? '0' + day : day;
-                    option.value = `${formattedDay} ${monthsNames[targetMonth]} (${dayOfWeek})`;
-                    option.text = `${day} ${monthsNames[targetMonth]} - ${dayOfWeek}`;
-                    if (i === 0 && day === now.getDate()) option.selected = true;
-                    optgroup.appendChild(option);
-                }
-                dateSelect.appendChild(optgroup);
-            }
 
             let noClicks = 0;
             const noMessages = ["Кнопка сломалась, жми верхнюю 😉", "Сюда нельзя нажимать!", "Система не принимает отказы 🛑", "Ну всё, выбора нет, жми «Да» 💖"];
@@ -235,6 +290,7 @@
             });
 
             window.goToAgeCheck = function() { document.getElementById('step-question').style.display = 'none'; document.getElementById('step-age').style.display = 'block'; setTimeout(() => document.getElementById('age-input').focus(), 100); };
+            
             let currentAge = 0;
             window.submitAge = function() {
                 const age = parseInt(document.getElementById('age-input').value);
@@ -244,6 +300,7 @@
                 document.getElementById('step-age').style.display = 'none';
                 document.getElementById('step-age-confirm').style.display = 'block';
             };
+
             window.confirmAge = function(isConfirmed) {
                 if (!isConfirmed) {
                     document.getElementById('step-age-confirm').style.display = 'none';
@@ -255,16 +312,15 @@
                 }
                 document.getElementById('step-age-confirm').style.display = 'none';
                 document.getElementById('step-booking').style.display = 'block';
+                
                 const placeSelect = document.getElementById('place-select');
                 const formatText = document.getElementById('welcome-format-text');
                 if (currentAge >= 18) {
                     placeSelect.innerHTML = places18Plus;
-                    timeSelect.innerHTML = timeOptions18;
                     formatText.innerText = "🔥 Доступен весь ночной Челябинск (18+)";
                     formatText.className = "text-sm font-bold text-rose-400 text-center uppercase tracking-wider mb-2 drop-shadow-[0_0_10px_rgba(244,114,182,0.5)]";
                 } else {
                     placeSelect.innerHTML = placesUnder18;
-                    timeSelect.innerHTML = timeOptionsUnder18;
                     formatText.innerText = "✨ Уютный формат и романтика (16+)";
                     formatText.className = "text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2";
                 }
@@ -272,14 +328,27 @@
 
             window.acceptDate = function() {
                 const place = document.getElementById('place-select').value;
-                const date = document.getElementById('date-select').value;
-                const time = document.getElementById('time-select').value;
+                const dateVal = document.getElementById('date-input').value;
+                const timeVal = document.getElementById('time-input').value;
                 const phone = document.getElementById('phone-input').value.trim();
                 const paymentRadio = document.querySelector('input[name="payment"]:checked');
                 const payment = paymentRadio ? paymentRadio.value : 'Не указано';
+
+                // Проверка даты и времени
+                if (!dateVal || !timeVal) {
+                    alert("Пожалуйста, выбери дату и время! 📅⏰");
+                    return;
+                }
+
+                // Форматирование даты для красоты (из 2026-11-13 в 13 ноября)
+                const dateObj = new Date(dateVal);
+                const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+                const formattedDate = `${dateObj.getDate()} ${months[dateObj.getMonth()]}`;
+
                 const digitsOnly = phone.replace(/\D/g, '');
                 if (digitsOnly.length < 10) { alert("Пожалуйста, введи корректный номер телефона (минимум 10 цифр) 📱"); return; }
 
+                // Салют
                 var duration = 3 * 1000;
                 var animationEnd = Date.now() + duration;
                 var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff', '#fda4af'] };
@@ -295,23 +364,60 @@
                 document.getElementById('step-booking').style.display = 'none';
                 document.getElementById('success-card').style.display = 'block';
 
+                // --- ЛОГИКА УГАРНЫХ ГИФОК ---
                 let extraComment = "";
-                if (place.includes("дома")) extraComment = "Захвати свое любимое кино, я куплю вкусняшки! 🍿";
+                let gifUrl = "";
+                const gifContainer = document.getElementById('success-gif-container');
+                const gifImg = document.getElementById('success-gif');
+
+                if (place.includes("дома")) {
+                    extraComment = "Захвати свое любимое кино, я куплю вкусняшки! 🍿";
+                    // Угарная гифка про Netflix and chill
+                    gifUrl = "https://media.giphy.com/media/l0MYL5jX0VjW6fE2A/giphy.gif"; 
+                } 
                 else if (place.includes("тачке")) {
-                    if (payment === "Она ведет за свой кэш") extraComment = "Ты богатая? Оке, за всё сама оплатишь, я не против! И за бензин в том числе! ⛽🔥 Чисто на угарке залетим!";
-                    else if (payment === "Пополам (50/50)") extraComment = "Бензин пополам, музыка на полную. Погнали! 🏎💨";
-                    else extraComment = "Скажи подруге собираться, бензин и тачка с меня! 😎";
+                    if (payment === "Она платит") {
+                        extraComment = "Ты богатая? Оке, за всё сама оплатишь, я не против! И за бензин в том числе! ⛽🔥 Чисто на угарке залетим!";
+                    } else {
+                        extraComment = "Скажи подруге собираться, бензин и тачка с меня! 😎";
+                    }
+                    gifUrl = "https://media.giphy.com/media/3o7TKuO0H6s1sK1sG4/giphy.gif"; // Гифка с тачкой
                 }
-                else if (place.includes("Снегоходы")) extraComment = "Одевайся теплее, нас ждут заснеженные леса и перевалы! ❄️🏔";
-                else if (place.includes("Квадроциклы")) extraComment = "Готовься к бездорожью, будем месить грязь! 🏍💨";
-                else if (payment === "Она ведет за свой кэш") extraComment = "Ты богатая? Оке, за всё сама оплатишь, я не против! 😎";
+                else if (place.includes("Снегоходы") || place.includes("Квадроциклы")) {
+                    extraComment = "Держись крепче, будет трясти! 🏍💨";
+                    gifUrl = "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif"; 
+                }
+                else if (place.includes("Кировка") || place.includes("Парк") || place.includes("Набережная") || place.includes("Сад камней")) {
+                    extraComment = "Одевайся красиво, будем много фоткаться! 📸";
+                    // Милая анимация прогулки
+                    gifUrl = "https://media.giphy.com/media/3o7TKr3vK3X6Hq7Y2A/giphy.gif"; 
+                }
+                else if (payment === "Она платит") {
+                     extraComment = "Ты богатая? Оке, за всё сама оплатишь, я не против! 😎";
+                }
+
+                // ЭРОТИЧЕСКИЙ УГАР ДЛЯ 18+ (Если есть слово "дома" или просто 18+)
+                if (currentAge >= 18) {
+                    if (place.includes("дома") || place.includes("Кальян") || place.includes("Бары")) {
+                        // Гифка с танцующей девушкой / соблазнением
+                        gifUrl = "https://media.giphy.com/media/l41Yc1YhO6yH5Hq2A/giphy.gif"; 
+                    }
+                }
+
+                // Вставляем гифку, если она есть
+                if (gifUrl) {
+                    gifImg.src = gifUrl;
+                    gifContainer.style.display = 'block';
+                } else {
+                    gifContainer.style.display = 'none';
+                }
 
                 document.getElementById('success-text').innerHTML = `
                     📍 Место: <b class="text-pink-300">${place}</b><br>
-                    📅 Дата: <b class="text-pink-300">${date} в ${time}</b><br>
+                    📅 Дата: <b class="text-pink-300">${formattedDate} в ${timeVal}</b><br>
                     💸 Оплата: <b class="text-pink-300">${payment}</b><br>
                     📱 Телефон: <b class="text-pink-300">${phone}</b><br><br>
-                    ${extraComment ? `<span class="text-xs text-pink-200 block mt-2 mb-2">${extraComment}</span>` : ''}
+                    ${extraComment ? `<span class="text-xs text-pink-200 block mt-2 mb-2 font-medium">${extraComment}</span>` : ''}
                     <span class="text-pink-400 font-bold">Всё записано. Жду тебя! 🔥</span>`;
             };
         };
