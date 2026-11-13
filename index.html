@@ -271,21 +271,28 @@
             }
             setInterval(createFallingItem, 300);
 
-            // Обновленные данные с реальными описаниями
+            // Обновленные данные
             const places18Plus = `
-                <optgroup label="🏎 Экстрим и Тусовки">
+                <optgroup label="🏎 Экстрим и Драйв">
                     <option value="Покатушки на тачке (с подругой для друга)">Покатушки на тачке (с подругой для моего друга) 🏎💨</option>
+                    <option value="Снегоходы">Снегоходы — прокат техники, заснеженный лес, горные перевалы и озера. Инструкторы для новичков ❄️🏔</option>
+                    <option value="Квадроциклы">Квадроциклы — лесные трассы разной сложности (например, экстрим-клуб «Быстрай») 🏍💨</option>
                 </optgroup>
-                <optgroup label="🔥 Клубы и Бары (Реальные места)">
-                    <option value="Doski">Doski — стильный бар с неоном, караоке и танцами [citation:1]</option>
-                    <option value="Gpsy">Gpsy — бар-клуб с DJ, фейс-контролем и музыкой 80-90х [citation:2][citation:11]</option>
-                    <option value="Roxy Bar">Roxy Bar — танцы на барной стойке и тематические вечеринки [citation:3]</option>
-                    <option value="Meet Point">Meet Point — караоке-бар с go-go и обширной коктейльной картой [citation:4][citation:13]</option>
-                    <option value="The Бочка">The Бочка — легендарный паб с крафтовым пивом и концертами [citation:5][citation:14]</option>
+                <optgroup label="🔥 Клубы и Бары">
+                    <option value="Doski">Doski — стильный бар с неоном, караоке и танцами</option>
+                    <option value="Gpsy">Gpsy — бар-клуб с DJ, фейс-контролем и музыкой 80-90х</option>
+                    <option value="Roxy Bar">Roxy Bar — танцы на барной стойке и тематические вечеринки</option>
+                    <option value="Meet Point">Meet Point — караоке-бар с go-go и обширной коктейльной картой</option>
+                    <option value="The Бочка">The Бочка — легендарный паб с крафтовым пивом и концертами</option>
                 </optgroup>
                 <optgroup label="💨 Кальянные и Лаунж">
-                    <option value="Мята Lounge">Мята Lounge</option>
-                    <option value="Облако 53">Облако 53</option>
+                    <option value="OverPack Сантай">OverPack Сантай — большой выбор вкусов, настольные игры (шахматы, нарды), отличное соотношение цены и качества</option>
+                    <option value="OverPack Центр">OverPack Центр (пр-т Ленина, 77) — хвалят за атмосферу и большой выбор вкусов кальяна</option>
+                    <option value="Biblioteka lounge">Biblioteka lounge (ул. Свободы, 77 / Витебская, 4) — уютная атмосфера, акцент на качестве кальянов</option>
+                    <option value="Уголь Лаунж">Уголь Лаунж (пр-т Ленина, 64Б) — лаунж-зона с ресторанной подачей (стейки, том-ям), летняя веранда</option>
+                    <option value="Silent Town">Silent Town (ул. Братьев Кашириных, 85Б) — камерный отдых, закрытые комнаты, проектор и игровая приставка</option>
+                    <option value="Goodda Bar">Goodda Bar (ул. Витебская, 4) — кальян + паназиатская кухня (роллы, вок), DJ по выходным, летняя веранда</option>
+                    <option value="HookahPlace">HookahPlace (пр-т Ленина, 64 / Союз) — стабильный сервис, большие диваны, настольные игры</option>
                 </optgroup>
                 <optgroup label="🏠 Уютные места">
                     <option value="У меня дома">Посиделки у меня дома 🏠 (все дела)</option>
@@ -503,6 +510,12 @@
                         extraComment = "Скажи подруге собираться, бензин и тачка с меня! 😎";
                     }
                 } 
+                else if (place.includes("Снегоходы")) {
+                    extraComment = "Одевайся теплее, нас ждут заснеженные леса и перевалы! ❄️🏔";
+                }
+                else if (place.includes("Квадроциклы")) {
+                    extraComment = "Готовься к бездорожью, будем месить грязь! 🏍💨";
+                }
                 else if (payment === "Она ведет за свой кэш") {
                      extraComment = "Ты богатая? Оке, за всё сама оплатишь, я не против! 😎";
                 }
