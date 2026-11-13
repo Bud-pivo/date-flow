@@ -6,7 +6,6 @@
     <title>Private Invitation ✨</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Подключаем библиотеку для маски телефона -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
     <style>
@@ -76,14 +75,12 @@
 
     <div class="relative z-10 my-auto space-y-5 w-full">
         
-        <!-- Шапка -->
         <div class="glass rounded-[2.5rem] p-6 text-center shadow-2xl relative overflow-hidden">
             <div class="text-6xl mb-2 bunny-anim inline-block filter drop-shadow-[0_0_20px_rgba(244,114,182,0.8)]">🐰💖</div>
             <h1 class="text-3xl font-black bg-gradient-to-r from-pink-300 via-rose-400 to-purple-400 bg-clip-text text-transparent drop-shadow-sm">Особенное приглашение</h1>
             <p class="text-xs text-pink-200/80 mt-2 font-medium tracking-widest uppercase">Только для тебя ✨</p>
         </div>
 
-        <!-- ШАГ 1 -->
         <div id="step-question" class="glass rounded-[2.5rem] p-6 text-center space-y-6" style="display: block;">
             <h2 class="text-xl font-bold text-pink-100">Готова пойти со мной на свидание? 🥂</h2>
             <div class="space-y-4 pt-2">
@@ -92,7 +89,6 @@
             </div>
         </div>
 
-        <!-- ШАГ 2 -->
         <div id="step-age" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-lg font-bold text-pink-200">Сколько тебе лет? 🌸</h2>
             <p class="text-xs text-slate-300/80">Введи свой возраст, чтобы я подобрал идеальный план</p>
@@ -101,17 +97,18 @@
             <div id="age-error-block" class="pt-2" style="display: none;"><div class="bg-rose-500/20 border border-rose-500/50 p-4 rounded-2xl"><p class="text-sm text-rose-200 font-medium">Ой, извини, но тебе еще рано со мной гулять, ты слишком маленькая для таких приключений 🙈 <br><br><span class="font-bold text-white">Подрасти до 16 лет! 🌸</span></p></div></div>
         </div>
 
-        <!-- ШАГ 2.5 -->
         <div id="step-age-confirm" class="glass rounded-[2.5rem] p-6 text-center space-y-4" style="display: none;">
             <h2 class="text-lg font-bold text-pink-200">Точно-точно правильный возраст? 😏</h2>
-            <div class="flex justify-center py-2"><img src="https://media.tenor.com/VbnUQpnihPSIgIXuZvAAAAM/monkey-funny.gif" alt="Funny monkey" class="rounded-2xl w-48 h-48 object-cover shadow-[0_0_20px_rgba(244,114,182,0.4)] border border-pink-500/30"></div>
+            <div class="flex justify-center py-2">
+                <!-- Угарная гифка с обезьянкой -->
+                <img src="https://media.tenor.com/VbnUQpnihPSIgIXuZvAAAAi/monkey-funny.gif" alt="Funny monkey" class="rounded-2xl w-48 h-48 object-cover shadow-[0_0_20px_rgba(244,114,182,0.4)] border border-pink-500/30">
+            </div>
             <div class="grid grid-cols-2 gap-3 pt-2">
                 <button type="button" onclick="confirmAge(false)" class="bg-slate-800/80 hover:bg-slate-700 py-3.5 rounded-xl border border-slate-700 font-medium text-sm active:scale-95 transition cursor-pointer">Не, соврала 😅</button>
                 <button type="button" onclick="confirmAge(true)" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition cursor-pointer">Да, всё верно! 💯</button>
             </div>
         </div>
 
-        <!-- ШАГ 3 -->
         <div id="step-booking" class="glass rounded-[2.5rem] p-5 space-y-4" style="display: none;">
             <h2 id="welcome-format-text" class="text-sm font-bold text-pink-300 text-center uppercase tracking-wider mb-2"></h2>
 
@@ -134,7 +131,6 @@
                 </div>
             </div>
 
-            <!-- НОМЕР ТЕЛЕФОНА С МАСКОЙ -->
             <div class="pt-2">
                 <label class="block text-xs font-semibold text-pink-300 mb-1.5 uppercase tracking-wider">📱 Твой номер телефона:</label>
                 <input type="tel" id="phone-input" placeholder="+7 (999) 123-45-67" class="input-style text-sm" inputmode="numeric">
@@ -145,7 +141,6 @@
             </div>
         </div>
 
-        <!-- Экран успеха -->
         <div id="success-card" class="glass rounded-[2.5rem] p-8 text-center space-y-4" style="display: none;">
             <div class="text-7xl animate-bounce filter drop-shadow-[0_0_15px_rgba(244,114,182,0.8)]">💖</div>
             <h2 class="text-2xl font-bold text-pink-300">Идеально, договорились!</h2>
@@ -163,17 +158,10 @@
 
     <footer class="text-center text-[10px] text-pink-300/50 py-4 tracking-widest uppercase font-medium">Personal Date Engine • Chelyabinsk Edition</footer>
 
-    <!-- Скрипты -->
     <script>
         window.onload = function() {
-            // --- МАСКА ДЛЯ ТЕЛЕФОНА ---
-            // Жестко устанавливаем +7 и форматируем
-            $('#phone-input').inputmask("+7 (999) 999-99-99", {
-                clearIncomplete: true,
-                showMaskOnHover: false
-            });
+            $('#phone-input').inputmask("+7 (999) 999-99-99", { clearIncomplete: true, showMaskOnHover: false });
 
-            // Падающие элементы
             const fallingContainer = document.getElementById('falling-container');
             const emojis = ['💖', '🌸', '✨', '💕', '🌺', '💗'];
             function createFallingItem() {
@@ -189,12 +177,10 @@
             }
             setInterval(createFallingItem, 300);
 
-            // Установка даты/времени по умолчанию
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date-input').value = today;
             document.getElementById('time-input').value = "18:00";
 
-            // Списки мест (без скобок citation)
             const places18Plus = `
                 <optgroup label="🏎 Экстрим и Драйв">
                     <option value="Покатушки на тачке (с подругой для друга)">Покатушки на тачке 🏎💨</option>
@@ -311,25 +297,12 @@
                 }
             };
 
-            // ПРОВЕРКА НОМЕРА ПЕРЕД ПОДТВЕРЖДЕНИЕМ
             window.validateAndAccept = function() {
                 const phone = document.getElementById('phone-input').value;
-                
-                // Проверяем, что введено ровно 18 символов (полный формат +7 (999) 999-99-99)
-                if (phone.length !== 18) {
-                    alert("Пожалуйста, введи номер телефона полностью! 📱");
-                    return;
-                }
-
-                // Окно подтверждения (чтобы не наебали)
+                if (phone.length !== 18) { alert("Пожалуйста, введи номер телефона полностью! 📱"); return; }
                 const isConfirmed = confirm(`Ты уверена, что номер телефона введен верно?\n\n${phone}\n\nОн нужен, чтобы я мог связаться с тобой!`);
-                
-                if (isConfirmed) {
-                    acceptDate(phone);
-                } else {
-                    // Если не уверена, фокусируемся обратно на инпут
-                    document.getElementById('phone-input').focus();
-                }
+                if (isConfirmed) acceptDate(phone);
+                else document.getElementById('phone-input').focus();
             };
 
             window.acceptDate = function(phone) {
@@ -341,12 +314,10 @@
 
                 if (!dateVal || !timeVal) { alert("Пожалуйста, выбери дату и время! 📅⏰"); return; }
 
-                // Форматирование даты
                 const dateObj = new Date(dateVal);
                 const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
                 const formattedDate = `${dateObj.getDate()} ${months[dateObj.getMonth()]}`;
 
-                // Салют
                 var duration = 3 * 1000;
                 var animationEnd = Date.now() + duration;
                 var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#f472b6', '#fb7185', '#c084fc', '#ffffff', '#fda4af'] };
@@ -362,19 +333,19 @@
                 document.getElementById('step-booking').style.display = 'none';
                 document.getElementById('success-card').style.display = 'block';
 
-                // ЛОГИКА ГИФОК (Рабочие прямые ссылки)
                 let extraComment = "";
                 let gifUrl = "";
                 const gifContainer = document.getElementById('success-gif-container');
                 const gifImg = document.getElementById('success-gif');
 
+                // Гифки на прямых ссылках, которые 100% прогрузятся
                 if (place.includes("дома")) {
                     extraComment = "Захвати свое любимое кино, я куплю вкусняшки! 🍿";
-                    gifUrl = "https://media.tenor.com/On7l6a7Hq3gAAAAM/dance-funny.gif"; // Угарный танец
+                    gifUrl = "https://media.tenor.com/On7l6a7Hq3gAAAAM/dance-funny.gif"; 
                 } 
                 else if (place.includes("тачке")) {
                     extraComment = payment === "Она ведет за свой кэш" ? "Ты богатая? Оке, за бензин тоже ты! ⛽🔥" : "Скажи подруге собираться, бензин с меня! 😎";
-                    gifUrl = "https://media.tenor.com/2Gq3O4x5J6AAAAAM/drift-car.gif"; // Гифка тачки
+                    gifUrl = "https://media.tenor.com/2Gq3O4x5J6AAAAAM/drift-car.gif"; 
                 }
                 else if (place.includes("Снегоходы") || place.includes("Квадроциклы")) {
                     extraComment = "Держись крепче, будет трясти! 🏍💨";
@@ -391,7 +362,7 @@
                 // Эротический угар для 18+
                 if (currentAge >= 18) {
                     if (place.includes("дома") || place.includes("Кальян") || place.includes("Бары")) {
-                        gifUrl = "https://media.tenor.com/9Xz5Y4B3w5AAAAAM/sexy-dance.gif"; // Соблазнительный танец
+                        gifUrl = "https://media.tenor.com/9Xz5Y4B3w5AAAAAM/sexy-dance.gif"; 
                     }
                 }
 
@@ -402,6 +373,7 @@
                     gifContainer.style.display = 'none';
                 }
 
+                // Ссылка полностью убрана
                 document.getElementById('success-text').innerHTML = `
                     📍 Место: <b class="text-pink-300">${place}</b><br>
                     📅 Дата: <b class="text-pink-300">${formattedDate} в ${timeVal}</b><br>
